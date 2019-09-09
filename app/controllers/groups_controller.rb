@@ -11,6 +11,7 @@ class GroupsController < ApplicationController
 
   def new
     @group = current_user.groups.build
+    render partial: 'group_form', locals: { group: @group, submit_button: 'Create Group' }
   end
 
   def create

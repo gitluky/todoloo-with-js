@@ -1,4 +1,4 @@
-$(function () {
+$(document).ready(function() {
   display_group_form();
 
 })
@@ -6,8 +6,9 @@ $(function () {
 
 function display_group_form() {
   $('#create_group_btn').click(function(event) {
-    console.log(event);
-    debugger;
-  //   $('#create_group_form').innerHTML("<%= render partial: 'group_form', locals: { group: @group, submit_button: 'Create Group' } %>")
-});
+    let form = $.get('/groups/new')
+    form.done(function(data) {
+      $('#create_group_form').append(data)
+    })
+  });
 }
