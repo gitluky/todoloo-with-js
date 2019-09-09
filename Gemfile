@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 
 ruby '2.4.1'
-gem 'jquery'
+gem 'jquery-rails'
 gem 'active_model_serializers'
 gem 'dotenv-rails'
 gem 'omniauth'
