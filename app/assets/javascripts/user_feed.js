@@ -1,8 +1,6 @@
-$(document).ready(function() {
+$('.application.index').ready(function() {
   display_group_form();
-
 })
-
 
 function display_group_form() {
   $('#create_group_btn').click(function(event) {
@@ -32,12 +30,9 @@ function submitGroupFormListener() {
   $('form').submit(function(event) {
     event.preventDefault();
     const values = $(this).serialize();
-    debugger;
-    console.log(values)
     const creating_group = $.post('/groups', values);
     creating_group.done(function(data) {
       console.log(data)
     })
   });
-
 }
