@@ -15,18 +15,22 @@ class ApplicationController < ActionController::Base
     end
   end
 
-end
+  def user_feed
+    render json: @user, include: [:groups_for_user_feed, :received_invitations]
+  end
 
 private
 
-def redirect_if_not_logged_in
-  if !logged_in?
-    redirect_to login_path
+  def redirect_if_not_logged_in
+    if !logged_in?
+      redirect_to login_path
+    end
   end
-end
 
-def validate_user_group_membership
-  if @group.users.exclude?(current_user)
-    redirect_to root_path, flash: { message: 'You are not a member of the group you are trying to access.'}
+  def validate_user_group_membership
+    if @group.users.exclude?(current_user)
+      redirect_to root_path, flash: { message: 'You are not a member of the group you are trying to access.'}
+    end
   end
+
 end

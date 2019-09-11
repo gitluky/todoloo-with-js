@@ -7,10 +7,12 @@ class GroupsController < ApplicationController
 
   def index
     @groups = current_user.groups
+    render json: @groups
   end
 
   def new
     @group = current_user.groups.build
+    render partial: 'group_form', locals: { group: @group, submit_button: 'Create Group' }
   end
 
   def create

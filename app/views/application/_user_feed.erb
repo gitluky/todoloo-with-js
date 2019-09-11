@@ -1,51 +1,53 @@
-<%= tag.div class: 'container-fluid' do %>
-  <%= tag.div class: 'row justify-content-center mt-3 bg-light pt-2' do %>
-    <%= tag.h3 current_user.name + "'s Feed" %><br />
-  <% end %>
-  <%= tag.div class: 'row justify-content-center' do %>
-    <%= link_to "Create Group", new_group_path, class: 'btn btn-primary mt-3' %>
-  <% end %>
-  <%= tag.div class: 'row justify-content-center' do %>
-    <%= tag.h3 flash[:message], class: 'mt-3' %>
-  <% end %>
-  <%= tag.div class: 'row justify-content-center' do %>
-    <%= tag.h3 'Invitations' if !@invitations.empty? %>
-  <% end %>
-  <%= tag.div class: 'row justify-content-center' do %>
+<%= tag.div class: 'row justify-content-center mt-3 bg-light pt-2' do %>
+  <%= tag.h3 current_user.name + "'s Feed" %><br />
+<% end %>
+<%= tag.div class: 'row justify-content-center' do %>
+  <%= link_to "Make a New Group", '#' , class: 'btn btn-primary mt-3', id: 'create_group_btn' %>
+<% end %>
+<%= tag.div id: 'create_group_form'%>
+<%= tag.div class: 'row justify-content-center' do %>
+  <%= tag.h3 flash[:message], class: 'mt-3', id: '#flash_message' %>
+<% end %>
+<%= tag.div class: 'row justify-content-center' do %>
+  <%= tag.h3 'Invitations' if !@invitations.empty? %>
+<% end %>
 
-    <% @invitations.each do |invitation| %>
-      <%= tag.div class: 'card mx-1 text-center' do %>
-        <%= tag.div class: 'card-body' do %>
-          <%= tag.small class: 'my-0 text-muted' do %>
-            You have been invited to:
-          <% end %>
+<%= tag.div class: 'row justify-content-center' do %>
+  <% @invitations.each do |invitation| %>
+    <%= tag.div class: 'card mx-1 text-center' do %>
+      <%= tag.div class: 'card-body' do %>
+        <%= tag.small class: 'my-0 text-muted' do %>
+          You have been invited to:
+        <% end %>
 
-          <%= tag.h4 class: 'card-title text-center mb-0' do %>
-            <%=invitation.group.name %><br />
-          <% end %>
+        <%= tag.h4 class: 'card-title text-center mb-0' do %>
+          <%=invitation.group.name %><br />
+        <% end %>
 
-          <%= tag.small class: 'text-muted ' do %>
-            Sent By: <%= invitation.sender.name %>
-          <% end %>
+        <%= tag.small class: 'text-muted ' do %>
+          Sent By: <%= invitation.sender.name %>
+        <% end %>
 
-          <%= tag.div class: 'row justify-content-center mt-2' do %>
-            <%= link_to 'Accept', group_accept_invitation_path(invitation.group, invitation), class: 'btn btn-primary' %>
-            <%= link_to 'Decline', group_invitation_path(invitation.group, invitation), method: 'delete', class: 'btn btn-danger ml-2' %>
-          <% end %>
+        <%= tag.div class: 'row justify-content-center mt-2' do %>
+          <%= link_to 'Accept', group_accept_invitation_path(invitation.group, invitation), class: 'btn btn-primary' %>
+          <%= link_to 'Decline', group_invitation_path(invitation.group, invitation), method: 'delete', class: 'btn btn-danger ml-2' %>
         <% end %>
       <% end %>
     <% end %>
   <% end %>
-  <% if @groups.empty? %>
-    <%= tag.div class: 'row text-center mt-3 justify-content-center' do %>
-      <%= tag.div class:'col-lg-8 text-center' do %>
-        <%= tag.h3 'No recent activity.' %>
-        <%= link_to "My Groups", groups_path, class: 'btn btn-primary mt-3' %>
-      <% end %>
+<% end %>
+<% if @groups.empty? %>
+  <%= tag.div class: 'row text-center mt-3 justify-content-center' do %>
+    <%= tag.div class:'col-lg-8 text-center' do %>
+      <%= tag.h3 'No recent activity.' %>
+      <%= link_to "My Groups", groups_path, class: 'btn btn-primary mt-3' %>
     <% end %>
   <% end %>
+<% end %>
+
+<%= tag.div class: 'mx-auto feed-frame' do %>
   <% @groups.each do |group| %>
-    <%= tag.div class: 'row text-center mt-3 justify-content-center' do %>
+    <%= tag.div class: 'row text-center mt-3 justify-content-center mx-0 px-0' do %>
       <%= tag.div class:'col-lg-8 text-center' do %>
         <%= tag.div class: 'card bg-light text-center' do %>
           <%= image_tag (group.image), class: 'card-img-top-short rounded-top' if group.image.attached? %>
@@ -79,4 +81,5 @@
       <% end %>
     <% end %>
   <% end %>
+
 <% end %>
