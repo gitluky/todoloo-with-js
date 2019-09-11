@@ -1,3 +1,3 @@
 class InvitationSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :group_id, :recipient_id, :sender_id
 end
