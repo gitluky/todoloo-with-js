@@ -45,41 +45,7 @@
   <% end %>
 <% end %>
 
-<%= tag.div class: 'mx-auto feed-frame' do %>
-  <% @groups.each do |group| %>
-    <%= tag.div class: 'row text-center mt-3 justify-content-center mx-0 px-0' do %>
-      <%= tag.div class:'col-lg-8 text-center' do %>
-        <%= tag.div class: 'card bg-light text-center' do %>
-          <%= image_tag (group.image), class: 'card-img-top-short rounded-top' if group.image.attached? %>
+<%= tag.div class: 'mx-auto feed-frame mt-2' do %>
 
-          <%= tag.h2 group.name, class: 'mt-2 text-primary' %>
-
-          <%= tag.small class: 'mt-n2' do %>
-            <%= link_to 'View Group', group_path(group), class: 'ml-2' %>
-          <% end %>
-
-          <% group.recent_announcements.each do |announcement| %>
-
-            <%= tag.div class:'card mb-2' do %>
-              <%= tag.div class: 'card-body' do %>
-                <%= tag.h5 announcement.title %>
-                <%= announcement.content %>
-              <% end %>
-              <%= tag.div class: 'card-footer' do %>
-                <%= tag.small class: 'text-muted' do %>
-                  <%= announcement.user.name if announcement.user %> @
-                  <%= last_updated(announcement) %>
-                <% end %>
-              <% end %>
-            <% end %>
-
-          <% end %>
-
-          <%= render partial: 'groups/task_column', locals: { edit_path: edit_task_path(group), group: group, tasks: group.tasks_assigned_to_user(current_user), members: group.users, dropdown_name: 'Edit', button_name: 'Update', title: '', div_class: 'card-group' } %>
-
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
 
 <% end %>

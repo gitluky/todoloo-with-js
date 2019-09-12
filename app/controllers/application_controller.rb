@@ -12,11 +12,11 @@ class ApplicationController < ActionController::Base
       @user = current_user
       @invitations = @user.received_invitations
       @groups = @user.groups_for_user_feed
-      render json: @user, include: [:groups_for_user_feed, :received_invitations]
     end
   end
 
   def user_feed
+    @user = current_user
     render json: @user, include: [:groups_for_user_feed, :received_invitations]
   end
 

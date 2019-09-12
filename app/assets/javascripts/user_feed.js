@@ -1,6 +1,20 @@
 $('.application.index').ready(function() {
   display_group_form();
+  getUserFeed()
 })
+
+function getUserFeed() {
+  const Group = createGroup();
+  $.get('/user_feed', function(resp) {
+    const groups = resp['included'].filter((x) => x.type === "groups");
+    const new_groups = groups.map(function(group) {
+      return new Group(group)
+    })
+    new_groups.forEach(function(group) {
+      group.displayGroupFeed();
+    });
+  })
+}
 
 function display_group_form() {
   $('#create_group_btn').click(function(event) {
@@ -18,11 +32,15 @@ function attachFormListeners() {
   submitGroupFormListener();
 }
 
+function closeForm() {
+  $('#create_group_form').empty();
+  window.scrollTo(0,0)
+}
+
 function cancelGroupFormListener() {
   $('#cancel_group_form').click(function(event) {
     event.preventDefault();
-    $('#create_group_form').empty();
-    window.scrollTo(0,0)
+    closeForm();
   });
 }
 
@@ -31,8 +49,9 @@ function submitGroupFormListener() {
     event.preventDefault();
     const values = $(this).serialize();
     const creating_group = $.post('/groups', values);
-    creating_group.done(function(data) {
-      console.log(data)
+    creating_group.done(function() {
+      closeForm();
+      getUserFeed()
     })
   });
 }
