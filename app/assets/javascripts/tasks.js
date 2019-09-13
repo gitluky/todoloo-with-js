@@ -1,15 +1,17 @@
 function createTask() {
-  let tasktId = 0;
+  let taskCount = 0;
   return class {
     constructor(args) {
       for (let i = 0; i < Object.keys(args).length; i++) {
         this[Object.keys(args)[i]] = Object.values(args)[i];
       }
+      taskCount ++;
+      debugger;
     }
 
     displayUserFeedTasks() {
-      const taskHtml = `
-      <div class="card mb-2 col-lg-4 float-left">
+      let taskHtml = `
+      <div class="card mb-2 col-lg-4 float-right">
         <div class="card-body">
           <h5 class="card-title">${this.name}</h5>
           <div class="card-text" id="task_section">
@@ -43,6 +45,7 @@ function createTask() {
           </div>
         </div>
       </div>`;
+
       $('.tasks[data-groupid="' + this["group-id"] + '"]').append(taskHtml);
 
     }

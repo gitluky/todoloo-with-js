@@ -8,6 +8,9 @@ class TasksController < ApplicationController
   def create
     @task = @group.tasks.build(task_params)
     @task.created_by = current_user
+    if !!@task.assigned_to_id
+      @task.update_assignment('Assigned')
+    end
     @task.save
     redirect_to group_path(@task.group, anchor: 'task_section')
   end
