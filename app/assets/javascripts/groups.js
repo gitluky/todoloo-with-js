@@ -9,7 +9,7 @@ function createGroup() {
 
     displayGroupFeed() {
       let groupHtml = `<div class="row text-center mt-3 justify-content-center mx-0 px-0 w-100">
-      <div class="col-lg-10 text-center">
+      <div class="col-lg-12 text-center">
         <div class="card bg-light text-center">
           <img class="card-img-top-short rounded-top" src="${this["attributes"]["group-image"] ? this["attributes"]["group-image"] : ""}">
 

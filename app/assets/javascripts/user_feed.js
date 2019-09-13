@@ -1,6 +1,6 @@
 $('.application.index').ready(function() {
   display_group_form();
-  getUserFeed()
+  getUserFeed();
 })
 
 function getUserFeed() {
@@ -9,18 +9,18 @@ function getUserFeed() {
   $.get('/user_feed', function(resp) {
     const groups = resp['included'].filter((x) => x.type === "groups");
     const new_groups = groups.map(function(group) {
-      return new Group(group)
-    })
+      return new Group(group);
+    });
     new_groups.forEach(function(group) {
       group.displayGroupFeed();
       const new_announcements = group["attributes"]["recent-announcements"].map(function(recent_announcement){
-        return new Announcement(recent_announcement)
+        return new Announcement(recent_announcement);
       });
       new_announcements.forEach(function(announcement) {
         announcement.displayRecentGroupAnnouncements();
       });
-    })
-  })
+    });
+  });
 }
 
 function display_group_form() {
