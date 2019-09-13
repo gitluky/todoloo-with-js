@@ -22,7 +22,7 @@ function createGroup() {
           <div class="announcements" data-groupid="${this["id"]}">
           </div>
 
-          <div class="tasks">
+          <div class="tasks" data-groupid="${this["id"]}">
           </div>
 
           </div>

@@ -6,6 +6,7 @@ $('.application.index').ready(function() {
 function getUserFeed() {
   const Group = createGroup();
   const Announcement = createAnnouncement();
+  const Task = createTask();
   $.get('/user_feed', function(resp) {
     const groups = resp['included'].filter((x) => x.type === "groups");
     const new_groups = groups.map(function(group) {
@@ -19,6 +20,13 @@ function getUserFeed() {
       new_announcements.forEach(function(announcement) {
         announcement.displayRecentGroupAnnouncements();
       });
+      const assigned_tasks = group["attributes"]["tasks-assigned-to-current-user"].map(function(assigned_task){
+        return new Task(assigned_task);
+      });
+      assigned_tasks.forEach(function(task) {
+        task.displayUserFeedTasks();
+      });
+
     });
   });
 }
