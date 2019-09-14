@@ -8,27 +8,39 @@ function getUserFeed() {
   const Announcement = createAnnouncement();
   const Task = createTask();
   $.get('/user_feed', function(resp) {
-    const groups = resp['included'].filter((x) => x.type === "groups");
-    const new_groups = groups.map(function(group) {
-      return new Group(group);
-    });
-    new_groups.forEach(function(group) {
-      group.displayGroupFeed();
-      const new_announcements = group["attributes"]["recent-announcements"].map(function(recent_announcement){
-        return new Announcement(recent_announcement);
+    if (!resp['included']) {
+      displayNoActivity();
+    } else {
+      const groups = resp['included'].filter((x) => x.type === "groups");
+      const new_groups = groups.map(function(group) {
+        return new Group(group);
       });
-      new_announcements.forEach(function(announcement) {
-        announcement.displayRecentGroupAnnouncements();
+      new_groups.forEach(function(group) {
+        group.displayGroupFeed();
+        const new_announcements = group["attributes"]["recent-announcements"].map(function(recent_announcement){
+          return new Announcement(recent_announcement);
+        });
+        new_announcements.forEach(function(announcement) {
+          announcement.displayRecentGroupAnnouncements();
+        });
+        const assigned_tasks = group["attributes"]["tasks-assigned-to-current-user"].map(function(assigned_task){
+          return new Task(assigned_task);
+        });
+        assigned_tasks.forEach(function(task) {
+          task.displayUserFeedTasks();
+        });
       });
-      const assigned_tasks = group["attributes"]["tasks-assigned-to-current-user"].map(function(assigned_task){
-        return new Task(assigned_task);
-      });
-      assigned_tasks.forEach(function(task) {
-        task.displayUserFeedTasks();
-      });
-
-    });
+    }
   });
+}
+
+function displayNoActivity() {
+  let noActivityHtml = `<div class="row text-center mt-3 justify-content-center">
+    <div class="col-lg-8 text-center">
+      <h3>No recent activity.</h3>
+    </div>
+  </div>`
+  $('.feed-frame').append(noActivityHtml);
 }
 
 function display_group_form() {

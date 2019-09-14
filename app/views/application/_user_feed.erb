@@ -34,14 +34,6 @@
     <% end %>
   <% end %>
 <% end %>
-<% if @groups.empty? %>
-  <%= tag.div class: 'row text-center mt-3 justify-content-center' do %>
-    <%= tag.div class:'col-lg-8 text-center' do %>
-      <%= tag.h3 'No recent activity.' %>
-      <%= link_to "My Groups", groups_path, class: 'btn btn-primary mt-3' %>
-    <% end %>
-  <% end %>
-<% end %>
 
 <%= tag.div class: 'mx-auto feed-frame col-lg-6' do %>
 
