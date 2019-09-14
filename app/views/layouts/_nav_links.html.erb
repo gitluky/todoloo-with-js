@@ -1,7 +1,7 @@
 <ul class="mt-3 nav nav-pills justify-content-center">
   <% if logged_in? %>
     <li class="nav-item">
-      <a class="nav-link mt-3" href="<%= root_path %>">My Feed</a>
+      <a class="nav-link mt-3" href="<%= root_path %>"><%= current_user.name + "'s Feed"%></a>
     </li>
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="<%= user_path(current_user) %>" role="button" aria-haspopup="true" aria-expanded="false"><%= display_avatar(current_user, "xs") %></a>

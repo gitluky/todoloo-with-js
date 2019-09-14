@@ -8,7 +8,7 @@ function createGroup() {
     }
 
     displayGroupFeed() {
-      let groupHtml = `<div class="row text-center mt-3 justify-content-center mx-0 px-0 w-100">
+      let groupHtml = `<div class="row text-center justify-content-center mx-0 px-0 w-100">
       <div class="col-lg-12 text-center">
         <div class="card bg-light text-center">
           <img class="card-img-top-short rounded-top" src="${this["attributes"]["group-image"] ? this["attributes"]["group-image"] : ""}">
@@ -22,7 +22,7 @@ function createGroup() {
           <div class="announcements" data-groupid="${this["id"]}">
           </div>
 
-          <div class="tasks" data-groupid="${this["id"]}">
+          <div class="tasks row" data-groupid="${this["id"]}">
           </div>
 
           </div>
