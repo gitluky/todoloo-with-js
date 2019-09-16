@@ -1,4 +1,4 @@
-
+<%= tag.h3 "Edit"%>
 <%= form_for([group, task], html: { class: 'form-group' }) do |f| %>
   <%= tag.div class: 'form-group' do %>
     Name: <%= f.text_field :name, class: 'form-control' %>
@@ -9,5 +9,6 @@
   <%= tag.div class: 'form-group' do %>
     Assign to (optional): <%= f.collection_select(:assigned_to_id, members, :id, :name, include_blank: true, html_options: { class: 'form-control'}) %>
   <% end %>
-  <%=f.submit 'Update' %>
+  <%=f.submit 'Update', class: 'btn btn-primary'%>
+  <%= tag.a 'Cancel', href: '#', class: 'btn btn-danger', id: 'cancel_task_form' %>
 <% end %>

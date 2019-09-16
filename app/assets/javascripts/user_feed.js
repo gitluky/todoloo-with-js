@@ -95,22 +95,31 @@ function submitGroupFormListener() {
 }
 
 function displayTaskEditForm(taskId, groupId) {
-
   $('.edit-task-form[data-taskId="' + taskId + '"]').click(function(event) {
     event.preventDefault();
     closeTaskEditForm(taskId);
-    $.get('/groups/' + groupId + '/tasks/' + taskId + '/edit', function(data){
+    let taskEditForm = $.get('/groups/' + groupId + '/tasks/' + taskId + '/edit');
+    taskEditForm.done(function(data) {
       let taskFormHtml = `
       <div class="card mb-2">
         <div class="card-body">
         ${data}
         </div>
       </div>`
-      $('.edit-task[data-taskId="' + taskId + '"]').html(taskFormHtml);
+      $('.task-form-frame').html(taskFormHtml);
+      $('#cancel_task_form').click(function(e){
+        e.preventDefault();
+        closeTaskEditForm();
+      });
     });
+
   });
 }
 
+function submitTaskEditForm() {
+
+}
+
 function closeTaskEditForm(taskId) {
-  $('.edit-task').empty();
+  $('.task-form-frame').empty();
 }

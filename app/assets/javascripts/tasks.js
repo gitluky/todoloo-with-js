@@ -24,37 +24,15 @@ function createTask() {
             </ul>
           </div>
         </div>
-      </div>
-      <div class="edit-task" data-taskId="${this.id}">
-      </div>`;
+      </div>`
 
       $('.tasks[data-groupid="' + this["group-id"] + '"]').append(taskHtml);
 
-      this.displayTaskEditForm(this.id, this["group-id"]);
+      displayTaskEditForm(this.id, this["group-id"]);
 
     }
 
-    displayTaskEditForm(taskId, groupId) {
 
-      $('.edit-task-form[data-taskId="' + taskId + '"]').click(function(event) {
-        event.preventDefault();
-        closeTaskEditForm(taskId);
-        $.get('/groups/' + groupId + '/tasks/' + taskId + '/edit', function(data){
-          let taskFormHtml = `
-          <div class="card mb-2">
-            <div class="card-body">
-            ${data}
-            </div>
-          </div>`
-          $('.edit-task[data-taskId="' + taskId + '"]').html(taskFormHtml);
-        });
-      });
-    }
-
-    closeTaskEditForm(taskId) {
-      debugger;
-      $('.edit-task[data-taskId="' + taskId + '"]').empty();
-    }
 
   }
 }
