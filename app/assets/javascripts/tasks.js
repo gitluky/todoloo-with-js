@@ -1,5 +1,4 @@
 function createTask() {
-  let taskCount = 0;
   return class {
     constructor(args) {
       for (let i = 0; i < Object.keys(args).length; i++) {
@@ -42,6 +41,8 @@ function createTask() {
             </ul>
           </div>
         </div>
+      </div>
+      <div class="float-right edit-task" data-taskId="${this.id}">
       </div>`;
 
       $('.tasks[data-groupid="' + this["group-id"] + '"]').append(taskHtml);

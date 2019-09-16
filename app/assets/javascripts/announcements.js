@@ -1,5 +1,4 @@
 function createAnnouncement() {
-  let announcementId = 0;
   return class {
     constructor(args) {
       for (let i = 0; i < Object.keys(args).length; i++) {

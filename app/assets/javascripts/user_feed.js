@@ -7,10 +7,21 @@ function getUserFeed() {
   const Group = createGroup();
   const Announcement = createAnnouncement();
   const Task = createTask();
+  const Invitation = createInvitation();
+  $('.feed-frame').empty();
   $.get('/user_feed', function(resp) {
     if (!resp['included']) {
+
       displayNoActivity();
     } else {
+      const invitations = resp['included'].filter((x) => x.type === "invitations");
+      const new_invitations = invitations.map(function(invitation) {
+        return new Invitation(invitation);
+      });
+      new_invitations.forEach(function(invitation) {
+        invitation.displayUserFeedInvitations();
+      })
+
       const groups = resp['included'].filter((x) => x.type === "groups");
       const new_groups = groups.map(function(group) {
         return new Group(group);

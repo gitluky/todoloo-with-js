@@ -6,34 +6,8 @@
 <%= tag.div class: 'row justify-content-center' do %>
   <%= tag.h3 flash[:message], class: 'mt-2', id: '#flash_message' %>
 <% end %>
-<%= tag.div class: 'row justify-content-center' do %>
-  <%= tag.h3 'Invitations' if !@invitations.empty? %>
-<% end %>
 
-<%= tag.div class: 'row justify-content-center mb-3' do %>
-  <% @invitations.each do |invitation| %>
-    <%= tag.div class: 'card mx-1 text-center' do %>
-      <%= tag.div class: 'card-body' do %>
-        <%= tag.small class: 'my-0 text-muted' do %>
-          You have been invited to:
-        <% end %>
-
-        <%= tag.h4 class: 'card-title text-center mb-0' do %>
-          <%=invitation.group.name %><br />
-        <% end %>
-
-        <%= tag.small class: 'text-muted ' do %>
-          Sent By: <%= invitation.sender.name %>
-        <% end %>
-
-        <%= tag.div class: 'row justify-content-center mt-2' do %>
-          <%= link_to 'Accept', group_accept_invitation_path(invitation.group, invitation), class: 'btn btn-primary' %>
-          <%= link_to 'Decline', group_invitation_path(invitation.group, invitation), method: 'delete', class: 'btn btn-danger ml-2' %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= tag.div class: 'row justify-content-center mb-3 invitations' %>
 
 <%= tag.div class: 'mx-auto feed-frame col-lg-6' do %>
 
