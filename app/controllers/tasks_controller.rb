@@ -38,7 +38,7 @@ class TasksController < ApplicationController
     if !!@task.assigned_to_id
       @task.update_assignment('Assigned')
     end
-    redirect_to group_path(@group, anchor: 'task_section')
+    render json: @task, status: 201
   end
 
   def destroy

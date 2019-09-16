@@ -9,6 +9,7 @@ function getUserFeed() {
   const Task = createTask();
   const Invitation = createInvitation();
   $('.feed-frame').empty();
+  $('.invitations').empty();
   $.get('/user_feed', function(resp) {
     if (!resp['included']) {
 
@@ -107,6 +108,9 @@ function displayTaskEditForm(taskId, groupId) {
         </div>
       </div>`
       $('.task-form-frame').html(taskFormHtml);
+      $('#task-edit-form').attr('data-groupId', groupId);
+      $('#task-edit-form').attr('data-taskId', taskId);
+      submitTaskEditForm();
       $('#cancel_task_form').click(function(e){
         e.preventDefault();
         closeTaskEditForm();
@@ -117,7 +121,22 @@ function displayTaskEditForm(taskId, groupId) {
 }
 
 function submitTaskEditForm() {
+  $('#task-edit-form').submit(function(event) {
+    event.preventDefault();
+    const groupId = $('#task-edit-form').attr('data-groupId')
+    const taskId = $('#task-edit-form').attr('data-taskId')
+    const values = $(this).serialize();
 
+    const editTask = $.ajax({
+      type: "PATCH",
+      url: '/groups/' + groupId + '/tasks/' + taskId,
+      data: values,
+      success : function() {
+        closeTaskEditForm();
+        getUserFeed();
+      }
+    });
+  });
 }
 
 function closeTaskEditForm(taskId) {
