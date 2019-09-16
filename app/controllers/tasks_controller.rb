@@ -27,7 +27,9 @@ class TasksController < ApplicationController
   end
 
   def edit
-
+    @group = @task.group
+    @members = @group.users
+    render partial: 'edit_form', locals: { task: @task, group: @group, members: @members }
   end
 
   def update
