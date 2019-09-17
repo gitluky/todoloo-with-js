@@ -6,7 +6,6 @@
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="<%= user_path(current_user) %>" role="button" aria-haspopup="true" aria-expanded="false"><%= display_avatar(current_user, "xs") %></a>
       <div class="dropdown-menu">
-        <%= link_to 'My Groups', groups_path(current_user), class: 'dropdown-item' %>
         <%= link_to 'Edit Account', edit_user_path(current_user), class: 'dropdown-item' %>
         <%= link_to 'Log Out', logout_path, class: 'dropdown-item' %>
       </div>

@@ -24,6 +24,7 @@ function createGroup() {
           <div class="tasks row" data-groupid="${this["id"]}">
           </div>
 
+
           </div>
         </div>
       </div>`;
