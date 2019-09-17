@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     post '/users/:id/kick', to: 'users#kick', as: 'kick_member'
     get '/invitations/:id/accept', to: 'invitations#accept', as: 'accept_invitation'
   end
+    get 'groups/:id/group_data', to: 'groups#group_data'
 
   resources :tasks do
     resources :notes, only: [:new, :create, :edit, :update, :destroy]

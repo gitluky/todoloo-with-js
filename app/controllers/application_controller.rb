@@ -8,11 +8,7 @@ class ApplicationController < ActionController::Base
   skip_before_action :redirect_if_not_logged_in, only: [:index]
 
   def index
-    if logged_in?
-      @user = current_user
-      @invitations = @user.received_invitations
-      @groups = @user.groups_for_user_feed
-    end
+
   end
 
   def user_feed

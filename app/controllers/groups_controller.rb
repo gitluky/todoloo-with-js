@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
 
   before_action :redirect_if_not_logged_in
-  before_action :set_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_group, only: [:show, :edit, :update, :destroy, :group_data]
   before_action :validate_user_group_membership, only: [:show]
   before_action :validate_admin_user_actions, only: [:edit, :update, :destroy]
 
@@ -40,7 +40,10 @@ class GroupsController < ApplicationController
     @members = @group.users
     @admins = @group.admins
     @non_admins = @group.non_admins
+  end
 
+  def group_data
+    render json: @group
   end
 
   def edit
