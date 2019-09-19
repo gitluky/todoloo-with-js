@@ -1,4 +1,4 @@
-<%= tag.div class: 'text-center' do %>
+<%= tag.div class: 'text-center', id: 'group_show', data: { groupId: @group.id } do %>
   <%= tag.h3 flash[:message], class: 'mt-3' %>
   <%= tag.ul class: "nav nav-pills justify-content-center mt-3 mb-2" do %>
     <% if current_user.is_admin?(@group) %>
@@ -29,7 +29,7 @@
   <%= tag.div class: 'row text-center mt-4' do %>
     <%= tag.div class:'col-md-2' do %>
       <%= tag.div class: 'text-right' do %>
-        <%= tag.h6 'Admins:' %>
+        <%= tag.h6 'Admins:', id: 'admins' %>
         <% @admins.each do |admin| %>
           <%= tag.li class: 'mt-2' do %>
 
@@ -42,7 +42,7 @@
             <% end %>
           <% end %>
         <% end %>
-        <%= tag.h6 'Members:', class: 'mt-4' %>
+        <%= tag.h6 'Members:', class: 'mt-4', id: 'members' %>
         <% @non_admins.each do |non_admin| %>
           <%= tag.li class: 'mt-2' do %>
             <%= non_admin.name %> <%= display_avatar(non_admin, 'xs') %><br />
