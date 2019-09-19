@@ -15,19 +15,11 @@ class GroupsController < ApplicationController
   end
 
   def create
-    @group = current_user.groups.create(group_params)
+    @group = Group.create_group_by_user(current_user, group_params)
     if @group.valid?
-      @group.last_edited_by = current_user
       @group.announcements.create(title: 'Welcome!', content: 'Welcome to your new group! You can now start inviting members and creating tasks.')
-      current_user.grant_admin_membership(@group)
-      if !@group.image.attached?
-        @group.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'placeholder-banner.png')), filename: 'placeholder-banner.png', content_type: 'image/png')
-      end
-      @group.save
-      redirect_to group_path(@group), flash: { message: 'Your group has been created.' }
-    else
-      render :new
     end
+    render json: @group
   end
 
   def show

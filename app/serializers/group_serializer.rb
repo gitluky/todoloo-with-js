@@ -1,6 +1,6 @@
 class GroupSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :name, :description, :group_image, :invitations, :assigned_tasks, :available_tasks, :recent_completed_tasks, :users
+  attributes :id, :name, :description, :group_image, :invitations, :assigned_tasks, :available_tasks, :recent_completed_tasks, :users, :errors
 
   has_many :admins, serializer: GroupAdminSerializer
   has_many :non_admins, serializer: GroupNonAdminSerializer

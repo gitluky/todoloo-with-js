@@ -88,9 +88,9 @@ function submitGroupFormListener() {
     event.preventDefault();
     const values = $(this).serialize();
     const creating_group = $.post('/groups', values);
-    creating_group.done(function() {
+    creating_group.done(function(data) {
       closeForm();
-      getUserFeed()
+      getUserFeed();
     })
   });
 }

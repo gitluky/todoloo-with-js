@@ -18,6 +18,16 @@ class User < ApplicationRecord
   scope :created_most_tasks, -> (group) { joins("INNER JOIN 'tasks' ON 'users'.'id' = 'tasks'.'created_by_id'").where( tasks: { group_id: group }).group('tasks.created_by_id').order('count(tasks.created_by_id) desc').first }
   scope :created_most_recent_task, -> (group) { joins("INNER JOIN 'tasks' ON 'users'.'id' = 'tasks'.'created_by_id'").where( tasks: { group_id: group }).order('tasks.created_at desc').first }
 
+  def self.make_new_user(user_params)
+    user = self.new(user_params)
+    if !user.avatar.attached?
+      user.avatar.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'default_avatar.png')), filename: 'default_avatar.png', content_type: 'image/png')
+    end
+    user.save
+    user
+  end
+
+
   def self.find_or_create_by_oauth(oauth_hash)
     user = User.find_or_create_by(email: oauth_hash['info']['email']) do |u|
       u.uid = oauth_hash['uid']
@@ -37,9 +47,9 @@ class User < ApplicationRecord
   end
 
   def grant_admin_membership(group)
-    membership = memberships.where(group_id: group.id).first
-    membership.admin = true
-    membership.save
+    self.membership = memberships.where(group_id: group.id).first
+    self.membership.admin = true
+    self.membership.save
   end
 
   def remove_admin_membership(group)
