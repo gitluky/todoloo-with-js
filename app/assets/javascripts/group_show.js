@@ -1,0 +1,3 @@
+$('.group.show').ready(function() {
+
+});
