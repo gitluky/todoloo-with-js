@@ -1,4 +1,4 @@
-class UserGroupSerializer < ActiveModel::Serializer
+class UserFeedGroupSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :name, :description, :group_image, :recent_announcements, :tasks_assigned_to_current_user
 
