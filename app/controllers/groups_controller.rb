@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
   end
 
   def group_data
-    render json: @group, include: [:admins, :non_admins]
+    render json: @group
   end
 
   def edit

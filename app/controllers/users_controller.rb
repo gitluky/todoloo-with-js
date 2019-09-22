@@ -40,12 +40,12 @@ class UsersController < ApplicationController
 
   def create_admin
     @user.grant_admin_membership(@group)
-    redirect_to group_path(@group)
+    render json: @group
   end
 
   def delete_admin
     @user.remove_admin_membership(@group)
-    redirect_to group_path(@group)
+    render json: @group
   end
 
   def kick

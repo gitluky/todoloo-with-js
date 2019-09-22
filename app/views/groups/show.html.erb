@@ -29,21 +29,10 @@
   <%= tag.div class: 'row text-center mt-4' do %>
     <%= tag.div class:'col-md-2' do %>
       <%= tag.div class: 'text-right' do %>
+
         <%= tag.h6 'Admins:', id: 'admins' %>
 
         <%= tag.h6 'Members:', class: 'mt-4', id: 'members' %>
-        <% @non_admins.each do |non_admin| %>
-          <%= tag.li class: 'mt-2' do %>
-            <%= non_admin.name %> <%= display_avatar(non_admin, 'xs') %><br />
-            <% if current_user.is_admin?(@group) %>
-              <%= tag.small class: 'mr-n3' do %>
-                <%= link_to 'Kick Member', group_kick_member_path(@group, non_admin), class: 'mr-2', method: 'post' %>
-                <%= link_to 'Make Admin', group_create_admin_path(@group, non_admin), class: 'mr-3', method: 'post' %>
-              <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
-
 
         <% if !@invitations.empty? %>
           <%= tag.h6 'Invitations:', class: 'mt-4' %>
