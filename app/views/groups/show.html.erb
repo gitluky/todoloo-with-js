@@ -30,18 +30,7 @@
     <%= tag.div class:'col-md-2' do %>
       <%= tag.div class: 'text-right' do %>
         <%= tag.h6 'Admins:', id: 'admins' %>
-        <% @admins.each do |admin| %>
-          <%= tag.li class: 'mt-2' do %>
 
-            <%= admin.name %> <%= display_avatar(admin, 'xs') %><br />
-            <% if current_user.is_admin?(@group) %>
-              <%= tag.small class: 'mr-n3' do %>
-                <%= link_to 'Kick Member', group_kick_member_path(@group, admin), class: 'mr-2', method: 'post' %>
-                <%= link_to 'Remove Admin', group_delete_admin_path(@group, admin), class: 'mr-3', method: 'post' %>
-              <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
         <%= tag.h6 'Members:', class: 'mt-4', id: 'members' %>
         <% @non_admins.each do |non_admin| %>
           <%= tag.li class: 'mt-2' do %>

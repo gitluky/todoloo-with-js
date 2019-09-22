@@ -47,9 +47,9 @@ class User < ApplicationRecord
   end
 
   def grant_admin_membership(group)
-    self.membership = memberships.where(group_id: group.id).first
-    self.membership.admin = true
-    self.membership.save
+    membership = memberships.where(group_id: group.id).first
+    membership.admin = true
+    membership.save
   end
 
   def remove_admin_membership(group)
