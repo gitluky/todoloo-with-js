@@ -39,12 +39,16 @@ function getUserFeed() {
           return new Task(assigned_task);
         });
         assigned_tasks.forEach(function(task) {
-          task.displayUserFeedTasks();
+          task.displayUserFeedTasks(function() {
+            task.attachTaskEditListeners(task.attachSubmitTaskEditListener)
+            })
+          });
+
         });
-      });
-    }
-  });
-}
+      };
+    });
+  }
+
 
 function displayNoActivity() {
   let noActivityHtml = `<div class="row text-center mt-3 justify-content-center">
@@ -93,52 +97,4 @@ function submitGroupFormListener() {
       getUserFeed();
     })
   });
-}
-
-function displayTaskEditForm(taskId, groupId) {
-  $('.edit-task-form[data-taskId="' + taskId + '"]').click(function(event) {
-    event.preventDefault();
-    closeTaskEditForm(taskId);
-    let taskEditForm = $.get('/groups/' + groupId + '/tasks/' + taskId + '/edit');
-    taskEditForm.done(function(data) {
-      let taskFormHtml = `
-      <div class="card mb-2">
-        <div class="card-body">
-        ${data}
-        </div>
-      </div>`
-      $('.task-form-frame').html(taskFormHtml);
-      $('#task-edit-form').attr('data-groupId', groupId);
-      $('#task-edit-form').attr('data-taskId', taskId);
-      submitTaskEditForm();
-      $('#cancel_task_form').click(function(e){
-        e.preventDefault();
-        closeTaskEditForm();
-      });
-    });
-
-  });
-}
-
-function submitTaskEditForm() {
-  $('#task-edit-form').submit(function(event) {
-    event.preventDefault();
-    const groupId = $('#task-edit-form').attr('data-groupId')
-    const taskId = $('#task-edit-form').attr('data-taskId')
-    const values = $(this).serialize();
-
-    const editTask = $.ajax({
-      type: "PATCH",
-      url: '/groups/' + groupId + '/tasks/' + taskId,
-      data: values,
-      success : function() {
-        closeTaskEditForm();
-        getUserFeed();
-      }
-    });
-  });
-}
-
-function closeTaskEditForm(taskId) {
-  $('.task-form-frame').empty();
 }
