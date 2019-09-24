@@ -8,7 +8,7 @@ function createUser() {
 
     displayUserInfo() {
       const userHtml = `
-      <li class="mt-2 font-weight-normal members" data-userId="${this['user-id']}" data-admin="${this.admin}">
+      <li class="mt-2 font-weight-normal members" data-groupId="${this['group-id']}" data-userId="${this['user-id']}" data-admin="${this.admin}">
         ${this.name} <img class="avatar-xs" src="${this.avatar}"><br>
       </li>`
       if (this.admin === true) {

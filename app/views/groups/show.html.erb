@@ -30,9 +30,11 @@
     <%= tag.div class:'col-md-2' do %>
       <%= tag.div class: 'text-right' do %>
 
-        <%= tag.h6 'Admins:', id: 'admins' %>
+        <%= tag.h6 'Admins:' %>
+        <%= tag.div id: 'admins' %>
 
-        <%= tag.h6 'Members:', class: 'mt-4', id: 'members' %>
+        <%= tag.h6 'Members:', class: 'mt-4' %>
+        <%= tag.div id: 'members' %>
 
         <% if !@invitations.empty? %>
           <%= tag.h6 'Invitations:', class: 'mt-4' %>
@@ -52,31 +54,9 @@
     <% end %>
 
 
-    <%= tag.div class:'col-lg-3 text-left' do %>
-        <% @announcements.each do |announcement| %>
-        <%= tag.div class:'card mb-2' do %>
-          <%= tag.div class:'card-header' do %>
-            <%= tag.h5 date_created(announcement) %>
-          <% end %>
-          <%= tag.div class: 'card-body' do %>
-            <%= tag.h5 announcement.title %>
-            <%= announcement.content %>
-            <% if current_user.is_admin?(@group) || current_user == announcement.user %>
-              <%= tag.div class: 'row justify-content-center mt-2' do %>
-                <%= link_to 'Edit', edit_group_announcement_path(@group, announcement), class: 'mr-5' %>
-                <%= link_to 'Delete', group_announcement_path(@group, announcement), method: 'delete' %>
-              <% end %>
-            <% end %>
-          <% end %>
-          <%= tag.div class: 'card-footer' do %>
-            <%= tag.small class: 'text-muted' do %>
-              <%= announcement.user.name if announcement.user %> @
-              <%= last_updated(announcement) %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
+  <%= tag.div class:'col-lg-3 text-left', id: 'announcements' %>
+
+
 
   <%= render partial: 'task_column', locals: {  group: @group, tasks: @available_tasks, members: @members, dropdown_name: 'Edit', button_name: 'Update', title: 'Available', div_class: 'col-lg-2' } %>
   <%= render partial: 'task_column', locals: {  group: @group, tasks: @assigned_tasks, members: @members, dropdown_name: 'Edit', button_name: 'Update', title: 'Assigned', div_class: 'col-lg-2' } %>

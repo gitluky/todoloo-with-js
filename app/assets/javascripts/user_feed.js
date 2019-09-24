@@ -33,7 +33,7 @@ function getUserFeed() {
           return new Announcement(recent_announcement);
         });
         new_announcements.forEach(function(announcement) {
-          announcement.displayRecentGroupAnnouncements();
+          announcement.displayUserFeedAnnouncements();
         });
         const assigned_tasks = group["attributes"]["tasks-assigned-to-current-user"].map(function(assigned_task){
           return new Task(assigned_task);
