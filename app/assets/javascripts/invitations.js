@@ -6,7 +6,7 @@ function createInvitation() {
       }
     }
 
-    displayUserFeedInvitations() {
+    displayUserFeedInvitation() {
       let invitationHtml = `
         <div class="card mx-1 text-center">
           <div class="card-body">

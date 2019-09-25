@@ -8,7 +8,7 @@ function createAnnouncement() {
 
 
 
-    displayUserFeedAnnouncements() {
+    displayUserFeedAnnouncement() {
       let announcementHtml =`<div class="card mb-2" data-announcementid="${this.id}">
           <div class="card-body">
             <h5>${this.title}</h5>
@@ -23,7 +23,7 @@ function createAnnouncement() {
       $('.announcements[data-groupid="' + this["group_id"] + '"]').append(announcementHtml);
     }
 
-    displayGroupShowAnnouncements() {
+    displayGroupAnnouncement() {
       let announcementHtml = `
         <div class="card mb-2">
           <div class="card-body">

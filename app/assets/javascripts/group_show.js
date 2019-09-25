@@ -7,6 +7,7 @@ function getGroupData() {
   const getData = $.get('/groups/' + groupId + '/group_data');
    getData.done((resp) => {
     createMemberList(resp);
+    displayGrowShowAnnouncements(resp);
   });
 }
 
@@ -20,7 +21,7 @@ function creator(resp, creator_id) {
 
 function createMemberList(resp) {
   const User = createUser();
-  const members = resp['data']['attributes']['members'].map((member) => {
+  const members = resp['data']['attributes']['members'].map(member => {
     return new User(member);
   });
   members.forEach((member) => {
@@ -30,6 +31,17 @@ function createMemberList(resp) {
     displayAdminLinksForAdminList();
     displayAdminLinksForMemberList();
   }
+}
+
+function displayGrowShowAnnouncements(resp) {
+  const Announcement = createAnnouncement();
+  const announcements = resp['data']['attributes']['announcements-in-order'].map(announcement => {
+    return new Announcement(announcement);
+  });
+  announcements.forEach((announcement) => {
+    announcement.displayGroupAnnouncement();
+  });
+
 }
 
 function displayAdminLinksForAdminList() {
@@ -61,7 +73,7 @@ function displayAdminLinksForMemberList() {
 }
 
 function kickMemberLink(groupId, userId) {
-  $('.kick-member[data-userId="' + userId + '"]').click(function(e) {
+  $('.kick-member[data-userId="' + userId + '"]').click(e => {
     e.preventDefault();
     const kicking = $.get('/groups/' + groupId + '/users/' + userId + '/kick');
     kicking.done(function(){
@@ -73,7 +85,7 @@ function kickMemberLink(groupId, userId) {
 }
 
 function makeAdminLink(groupId, userId) {
-  $('.make-admin[data-userId="' + userId + '"]').click((e) => {
+  $('.make-admin[data-userId="' + userId + '"]').click(e => {
     e.preventDefault();
     const makeAdmin = $.get('/groups/' + groupId + '/users/' + userId + '/create_admin');
     makeAdmin.done(() => {
@@ -85,7 +97,7 @@ function makeAdminLink(groupId, userId) {
 }
 
 function removeAdminLink(groupId, userId) {
-  $('.remove-admin[data-userId="' + userId + '"]').click(function(e) {
+  $('.remove-admin[data-userId="' + userId + '"]').click(e => {
     e.preventDefault();
     const removeAdmin = $.get('/groups/' + groupId + '/users/' + userId + '/delete_admin');
     removeAdmin.done(function(){

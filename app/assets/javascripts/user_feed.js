@@ -20,7 +20,7 @@ function getUserFeed() {
         return new Invitation(invitation);
       });
       new_invitations.forEach(function(invitation) {
-        invitation.displayUserFeedInvitations();
+        invitation.displayUserFeedInvitation();
       })
 
       const groups = resp['included'].filter((x) => x.type === "groups");
@@ -33,7 +33,7 @@ function getUserFeed() {
           return new Announcement(recent_announcement);
         });
         new_announcements.forEach(function(announcement) {
-          announcement.displayUserFeedAnnouncements();
+          announcement.displayUserFeedAnnouncement();
         });
         const assigned_tasks = group["attributes"]["tasks-assigned-to-current-user"].map(function(assigned_task){
           return new Task(assigned_task);
