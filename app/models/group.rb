@@ -53,7 +53,7 @@ class Group < ApplicationRecord
   end
 
   def recent_completed_tasks
-    tasks.where(status: 'Completed').where('updated_at > ?', 1.week.ago).order(updated_at: :desc)
+    tasks.where(status: 'Completed').where('updated_at > ?', 1.day.ago).order(updated_at: :desc)
   end
 
 

@@ -1,8 +1,8 @@
 module TasksHelper
 
-  def tasks_category_title(title_string, tasks_array)
-    tasks_array.count > 0? title_string + " (#{tasks_array.count.to_s})" + ':' : nil
-  end
+  # def tasks_category_title(title_string, tasks_array)
+  #   tasks_array.count > 0? title_string + " (#{tasks_array.count.to_s})" + ':' : nil
+  # end
 
   def display_assignment_links(task)
     if !task.assigned?

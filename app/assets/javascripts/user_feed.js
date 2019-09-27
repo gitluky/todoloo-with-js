@@ -38,16 +38,21 @@ function getUserFeed() {
         const assigned_tasks = group["attributes"]["tasks-assigned-to-current-user"].map(function(assigned_task){
           return new Task(assigned_task);
         });
+        let taskHtml
         assigned_tasks.forEach(function(task) {
-          task.displayUserFeedTasks(function() {
-            task.attachTaskEditListeners(task.attachSubmitTaskEditListener)
-            })
+          taskHtml = task.createUserFeedTaskCards();
+          $('.tasks[data-groupid="' + task["group-id"] + '"]').append(taskHtml);
+          task.attachTaskEditListeners(function() {
+            task.attachTaskEditFormListeners();
           });
 
-        });
-      };
-    });
-  }
+        })
+      });
+    };
+  });
+}
+
+
 
 
 function displayNoActivity() {

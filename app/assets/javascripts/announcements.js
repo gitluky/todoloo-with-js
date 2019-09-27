@@ -16,7 +16,7 @@ function createAnnouncement() {
           </div>
           <div class="card-footer">
             <small class="text-muted">
-               @${new Date(this.updated_at).toLocaleString()}
+               @${new Date(this['updated_at']).toLocaleString()}
             </small>
           </div>
         </div>`;
@@ -35,7 +35,7 @@ function createAnnouncement() {
           <div class="card-footer">
             <small class="text-muted">
               ${this["user-name"]} @
-              ${new Date(this.updated_at).toLocaleString()}
+              ${new Date(this['updated-at']).toLocaleString()}
             </small>
           </div>
         </div>`

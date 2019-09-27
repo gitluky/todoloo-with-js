@@ -3,11 +3,15 @@ $('.groups.show').ready(function() {
 });
 
 function getGroupData() {
+  $('#admins').empty();
+  $('#members').empty();
+  $('#announcements').empty();
   const groupId = $('#group_show').attr('data-groupid');
   const getData = $.get('/groups/' + groupId + '/group_data');
    getData.done((resp) => {
     createMemberList(resp);
     displayGrowShowAnnouncements(resp);
+    createTaskLists(resp);
   });
 }
 
@@ -15,8 +19,8 @@ function isAdmin(resp) {
   return resp['data']['attributes']['current-member']['admin'] === true ? true : false
 }
 
-function creator(resp, creator_id) {
-  return resp['data']['attributes']['current-member']['user-id'] === creator_id ? true : false
+function isEditor(resp, editor_id) {
+  return resp['data']['attributes']['current-member']['user-id'] === editor_id ? true : false
 }
 
 function createMemberList(resp) {
@@ -77,8 +81,6 @@ function kickMemberLink(groupId, userId) {
     e.preventDefault();
     const kicking = $.get('/groups/' + groupId + '/users/' + userId + '/kick');
     kicking.done(function(){
-      $('#admins').empty();
-      $('#members').empty();
       getGroupData();
     });
   });
@@ -89,8 +91,6 @@ function makeAdminLink(groupId, userId) {
     e.preventDefault();
     const makeAdmin = $.get('/groups/' + groupId + '/users/' + userId + '/create_admin');
     makeAdmin.done(() => {
-      $('#admins').empty();
-      $('#members').empty();
       getGroupData();
     });
   });
@@ -101,9 +101,42 @@ function removeAdminLink(groupId, userId) {
     e.preventDefault();
     const removeAdmin = $.get('/groups/' + groupId + '/users/' + userId + '/delete_admin');
     removeAdmin.done(function(){
-      $('#admins').empty();
-      $('#members').empty();
       getGroupData();
     });
   });
+}
+
+function createTaskLists(resp) {
+  const Task = createTask();
+  const availableTasks = resp['data']['attributes']['available-tasks'].map((x) => new Task(x));
+  const assignedTasks = resp['data']['attributes']['assigned-tasks'].map((x) => new Task(x));
+  const completedTasks = resp['data']['attributes']['recent-completed-tasks'].map((x) => new Task(x));
+  $('#available-tasks').text('Available (' + availableTasks.length + ')')
+  $('#assigned-tasks').text('Assigned (' + assignedTasks.length + ')')
+  $('#completed-tasks').text('Completed (' + completedTasks.length + ')')
+  availableTasks.forEach((task) => {
+    let availableTaskCard
+    let editLinks
+    availableTaskCard = task.createGroupTaskCards();
+    $('#available-tasks').append(availableTaskCard);
+    editLinks = task.taskCardAdminLinks();
+    $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
+  });
+  assignedTasks.forEach((task) => {
+    let assignedTaskCard
+    let editLinks
+    assignedTaskCard = task.createGroupTaskCards();
+    $('#assigned-tasks').append(assignedTaskCard);
+    editLinks = task.taskCardAdminLinks();
+    $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
+  });
+  completedTasks.forEach((task) => {
+    let completedTaskCard
+    let editLinks
+    completedTaskCard = task.createGroupTaskCards();
+    $('#completed-tasks').append(completedTaskCard);
+    editLinks = task.taskCardAdminLinks();
+    $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
+  });
+
 }
