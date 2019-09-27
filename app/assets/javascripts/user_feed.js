@@ -43,7 +43,7 @@ function getUserFeed() {
           taskHtml = task.createUserFeedTaskCards();
           $('.tasks[data-groupid="' + task["group-id"] + '"]').append(taskHtml);
           task.attachTaskEditListeners(function() {
-            task.attachTaskEditFormListeners();
+            task.attachTaskEditFormListeners(getUserFeed);
           });
 
         })

@@ -88,7 +88,7 @@ function createTask() {
       });
     }
 
-    attachTaskEditFormListeners() {
+    attachTaskEditFormListeners(callback) {
       $('#cancel_task_form').click(function(e){
         e.preventDefault();
         $('.task-form-frame').empty();
@@ -105,7 +105,7 @@ function createTask() {
           data: values,
           success : function() {
             $('.task-form-frame').empty();
-            getUserFeed();
+            callback();
           }
         });
       });

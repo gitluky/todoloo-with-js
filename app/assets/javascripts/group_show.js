@@ -108,9 +108,9 @@ function removeAdminLink(groupId, userId) {
 
 function createTaskLists(resp) {
   const Task = createTask();
-  const availableTasks = resp['data']['attributes']['available-tasks'].map((x) => new Task(x));
-  const assignedTasks = resp['data']['attributes']['assigned-tasks'].map((x) => new Task(x));
-  const completedTasks = resp['data']['attributes']['recent-completed-tasks'].map((x) => new Task(x));
+  const availableTasks = resp['data']['attributes']['formatted-available-tasks'].map((x) => new Task(x));
+  const assignedTasks = resp['data']['attributes']['formatted-assigned-tasks'].map((x) => new Task(x));
+  const completedTasks = resp['data']['attributes']['formatted-recent-completed-tasks'].map((x) => new Task(x));
   $('#available-tasks').text('Available (' + availableTasks.length + ')')
   $('#assigned-tasks').text('Assigned (' + assignedTasks.length + ')')
   $('#completed-tasks').text('Completed (' + completedTasks.length + ')')
@@ -121,6 +121,9 @@ function createTaskLists(resp) {
     $('#available-tasks').append(availableTaskCard);
     editLinks = task.taskCardAdminLinks();
     $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
+    task.attachTaskEditListeners(function() {
+      task.attachTaskEditFormListeners(getGroupData);
+    });
   });
   assignedTasks.forEach((task) => {
     let assignedTaskCard
@@ -129,6 +132,9 @@ function createTaskLists(resp) {
     $('#assigned-tasks').append(assignedTaskCard);
     editLinks = task.taskCardAdminLinks();
     $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
+    task.attachTaskEditListeners(function() {
+      task.attachTaskEditFormListeners(getGroupData);
+    });
   });
   completedTasks.forEach((task) => {
     let completedTaskCard
@@ -137,6 +143,9 @@ function createTaskLists(resp) {
     $('#completed-tasks').append(completedTaskCard);
     editLinks = task.taskCardAdminLinks();
     $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
+    task.attachTaskEditListeners(function() {
+      task.attachTaskEditFormListeners(getGroupData);
+    });
   });
 
 }
