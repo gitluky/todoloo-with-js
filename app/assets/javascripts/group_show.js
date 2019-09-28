@@ -2,6 +2,7 @@ $('.groups.show').ready(function() {
  getGroupData();
  attachInvitationFormListener();
  attachCreateTaskFormListener();
+ attachPostAnnouncementListener();
 });
 
 function getGroupData() {
@@ -12,7 +13,7 @@ function getGroupData() {
   const getData = $.get('/groups/' + groupId + '/group_data');
    getData.done((resp) => {
     createMemberList(resp);
-    displayGrowShowAnnouncements(resp);
+    displayGroupShowAnnouncements(resp);
     createTaskLists(resp);
   });
 }
@@ -39,7 +40,7 @@ function createMemberList(resp) {
   }
 }
 
-function displayGrowShowAnnouncements(resp) {
+function displayGroupShowAnnouncements(resp) {
   const Announcement = createAnnouncement();
   const announcements = resp['data']['attributes']['announcements-in-order'].map(announcement => {
     return new Announcement(announcement);
@@ -129,7 +130,7 @@ function createTaskLists(resp) {
 
 function attachInvitationFormListener() {
   const groupId = $('#group_show').attr('data-groupid');
-  $('#send-invitation').click((e) => {
+  $('#send-invitation-button').click((e) => {
     e.preventDefault();
     const getInvitationForm = $.get('/groups/' + groupId + '/invitations/new');
     getInvitationForm.done((resp) => {
@@ -148,6 +149,18 @@ function attachCreateTaskFormListener() {
       $('.task-form-frame').empty();
       $('.task-form-frame').append('<h3>Create Task</h3>');
       $('.task-form-frame').append(resp);
+    });
+  });
+}
+
+function attachPostAnnouncementListener() {
+  const groupId = $('#group_show').attr('data-groupid');
+  $('#post-announcement-button').click((e) => {
+    e.preventDefault();
+    const getAnnouncementForm = $.get('/groups/' + groupId + '/announcements/new');
+    getAnnouncementForm.done((resp) => {
+      $('.announcement-form-frame').empty();
+      $('.announcement-form-frame').append(resp);
     });
   });
 }

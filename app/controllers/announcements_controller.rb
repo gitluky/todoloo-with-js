@@ -11,6 +11,7 @@ class AnnouncementsController < ApplicationController
 
   def new
     @announcement = @group.announcements.build
+    render partial: 'announcement_form', locals: { group: @group, announcement: @announcement}
   end
 
   def create
