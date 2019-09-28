@@ -17,7 +17,7 @@
 
 <%= tag.ul class: "nav nav-pills justify-content-center ml-5 mr-n5" do %>
   <%= link_to 'Post an Announcement', new_group_announcement_path(@group), class: 'nav-item nav-link ml-5 btn btn-outline-primary mr-2' %>
-  <%= link_to 'Send an Invitation', new_group_invitation_path(@group), class: 'nav-item nav-link ml-5 btn btn-outline-primary mr-2' %>
+  <%= link_to 'Send an Invitation', new_group_invitation_path(@group), class: 'nav-item nav-link ml-5 btn btn-outline-primary mr-2', id: 'send-invitation' %>
   <%= tag.div class: "col-2 ml-5" do %>
     <%= render partial: 'new_task_dropdown', locals: { group: @group, task: @task, members: @members, dropdown_name: 'Create Task', button_name: 'Create' } %>
   <% end %>

@@ -1,5 +1,6 @@
 $('.groups.show').ready(function() {
  getGroupData();
+ attachInvitationFormListener();
 });
 
 function getGroupData() {
@@ -137,15 +138,18 @@ function createTaskLists(resp) {
     });
   });
   completedTasks.forEach((task) => {
-    let completedTaskCard
-    let editLinks
-    completedTaskCard = task.createGroupTaskCards();
-    $('#completed-tasks').append(completedTaskCard);
-    editLinks = task.taskCardAdminLinks();
-    $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
-    task.attachTaskEditListeners(function() {
-      task.attachTaskEditFormListeners(getGroupData);
+    task.addEditLinksToTaskCards();
+  });
+}
+
+function attachInvitationFormListener() {
+  const groupId = $('#group_show').attr('data-groupid');
+  $('#send-invitation').click((e) => {
+    e.preventDefault();
+    const getInvitationForm = $.get('/groups/' + groupId + '/invitations/new');
+    getInvitationForm.done((resp) => {
+      $('.invitation-form-frame').empty();
+      $('.invitation-form-frame').append(resp);
     });
   });
-
 }

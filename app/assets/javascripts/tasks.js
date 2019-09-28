@@ -29,21 +29,24 @@ function createTask() {
     }
 
     createGroupTaskCards() {
-      return `
+      let taskCardHtml = `
       <div class="card mb-2">
         <div class="card-body">
           <h5 class="card-title">${this.name}</h5>
           <div class="card-text" id="task_section">
-            ${this.description}<br>
-            Assigned to: ${this["assigned-user-name"]}<br>
-            Status: ${this.status}<br>
-            Created by: ${this["creator-user-name"]}
-          <ul class="nav justify-content-center task-links" data-taskId="${this.id}">
-            <a class="nav-item nav-link px-1" href="/tasks/${this.id}">View</a>
-            </ul>
-          </div>
-        </div>
-      </div>`
+            ${this.description}<br>`
+      if (!!this["assigned-to-name"]) {
+        taskCardHtml += `Assigned to: ${this["assigned-to-name"]}<br>`
+      }
+      taskCardHtml += `Status: ${this.status}<br>
+                  Created by: ${this["created-by-name"]}
+                <ul class="nav justify-content-center task-links" data-taskId="${this.id}">
+                  <a class="nav-item nav-link px-1" href="/tasks/${this.id}">View</a>
+                  </ul>
+                </div>
+              </div>
+            </div>`
+      return taskCardHtml;
     }
 
     taskCardAdminLinks() {
@@ -82,6 +85,10 @@ function createTask() {
           $('.task-form-frame').html(taskFormHtml);
           $('#task-edit-form').attr('data-groupId', groupId);
           $('#task-edit-form').attr('data-taskId', taskId);
+          $("body,html").animate(
+            {
+              scrollTop: $('.task-form-frame').offset().top
+            }, 800);
           callback();
         });
 
@@ -110,6 +117,20 @@ function createTask() {
         });
       });
     }
+
+    addEditLinksToTaskCards() {
+      let taskCard
+      let editLinks
+      taskCard = this.createGroupTaskCards();
+      $('#completed-tasks').append(taskCard);
+      editLinks = this.taskCardAdminLinks();
+      $('.task-links[data-taskId="' + this.id + '"]').append(editLinks);
+      this.attachTaskEditListeners(() => {
+        this.attachTaskEditFormListeners(getGroupData);
+      });
+    }
+
+
 
   }
 }

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     resources :notes, only: [:new, :create, :edit, :update, :destroy]
   end
 
+
   get '/user_feed', to: 'application#user_feed'
   get '/login', to: 'sessions#new'
   post '/login', to: 'sessions#create'

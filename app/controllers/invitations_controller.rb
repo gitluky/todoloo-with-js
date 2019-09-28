@@ -8,6 +8,8 @@ class InvitationsController < ApplicationController
   def new
     @users = User.all
     @invitation = @group.invitations.build
+    render partial: 'invitations_form', locals: { invitation: @invitation, group: @group, users: @users }
+
   end
 
   def create

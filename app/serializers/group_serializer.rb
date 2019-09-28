@@ -9,16 +9,17 @@ class GroupSerializer < ActiveModel::Serializer
   def formatted_available_tasks
     object.available_tasks.map do |task|
       group = Group.find_by(id: task.group_id)
-      user = User.find_by(id: task.created_by_id)
-      {id: task.id, name: task.name, description: task.description, group_id: group.id, created_by_id: user.id, assigned_to_id: user.id, status: task.status}
+      created_by_user = User.find_by(id: task.created_by_id)
+      {id: task.id, name: task.name, description: task.description, group_id: group.id, created_by_id: created_by_user.id, created_by_name: created_by_user.name, status: task.status}
     end
   end
 
   def formatted_assigned_tasks
     object.assigned_tasks.map do |task|
       group = Group.find_by(id: task.group_id)
-      user = User.find_by(id: task.created_by_id)
-      {id: task.id, name: task.name, description: task.description, group_id: group.id, created_by_id: user.id, assigned_to_id: user.id, status: task.status}
+      created_by_user = User.find_by(id: task.created_by_id)
+      assigned_to_user = User.find_by(id: task.assigned_to_id)
+      {id: task.id, name: task.name, description: task.description, group_id: group.id, created_by_id: created_by_user.id, created_by_name: created_by_user.name, assigned_to_id: assigned_to_user.id, assigned_to_name: assigned_to_user.name, status: task.status}
     end
 
   end
@@ -26,8 +27,9 @@ class GroupSerializer < ActiveModel::Serializer
   def formatted_recent_completed_tasks
     object.recent_completed_tasks.map do |task|
       group = Group.find_by(id: task.group_id)
-      user = User.find_by(id: task.created_by_id)
-      {id: task.id, name: task.name, description: task.description, group_id: group.id, created_by_id: user.id, assigned_to_id: user.id, status: task.status}
+      created_by_user = User.find_by(id: task.created_by_id)
+      assigned_to_user = User.find_by(id: task.assigned_to_id)
+      {id: task.id, name: task.name, description: task.description, group_id: group.id, created_by_id: created_by_user.id, created_by_name: created_by_user.name, assigned_to_id: assigned_to_user.id, assigned_to_name: assigned_to_user.name, status: task.status}
     end
 
   end

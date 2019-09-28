@@ -1,24 +1,13 @@
+
 <%= tag.div class: 'row justify-content-center mt-5' do %>
   <% @invitation.errors.full_messages.each do |message| %>
     <%= tag.li message, class: 'text-danger' %>
   <% end %>
 <% end %>
 
+<%= render partial: 'invitations_form', locals: { invitation: @invitation, group: @group, users: @users } %>
+
 <%= tag.h4 'Search for user by email or username', class: 'text-center mt-5' %><br />
-<%= tag.div class: 'row justify-content-center' do %>
-
-  <%= form_for([@group, @invitation]) do |f| %>
-    <%= f.text_field :recipient_email, list: "user_names" %>
-     <datalist id="user_names">
-       <% @users.each do |user| %>
-         <option value="<%= user.email%>"><br />
-           <%= user.name %>
-       <% end %>
-     </datalist>
-    <%= f.submit 'Send Invite', class: 'btn btn-primary' %>
-  <% end %>
-<% end %>
-
 <%= tag.div class: 'row justify-content-center mt-5' do %>
   <%= link_to 'Back', group_path(@group), class: 'btn btn-outline-primary' %>
 <% end %>
