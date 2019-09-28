@@ -51,7 +51,7 @@ function createTask() {
 
     taskCardAdminLinks() {
       let taskCardHtml = `
-      <a class="nav-item nav-link px-1 edit-task-form" href="#" data-groupId="${this["group_id"]}" data-taskId="${this.id}">Edit</a>`
+      <a class="nav-item nav-link px-1 edit-task-link" href="#" data-groupId="${this["group-id"]}" data-taskId="${this.id}">Edit</a>`
       let editLinks
 
       if (this.status === "Available") {
@@ -71,7 +71,7 @@ function createTask() {
     attachTaskEditListeners(callback) {
       const taskId = this.id;
       const groupId = this["group-id"];
-      $('.edit-task-form[data-taskId="' + taskId + '"]').click(function (event) {
+      $('.edit-task-link[data-taskId="' + taskId + '"]').click(function (event) {
         event.preventDefault();
         $('.task-form-frame').empty();
         let taskEditForm = $.get('/groups/' + groupId + '/tasks/' + taskId + '/edit');
