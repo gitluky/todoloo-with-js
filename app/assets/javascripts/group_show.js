@@ -1,6 +1,7 @@
 $('.groups.show').ready(function() {
  getGroupData();
  attachInvitationFormListener();
+ attachCreateTaskFormListener();
 });
 
 function getGroupData() {
@@ -116,29 +117,13 @@ function createTaskLists(resp) {
   $('#assigned-tasks').text('Assigned (' + assignedTasks.length + ')')
   $('#completed-tasks').text('Completed (' + completedTasks.length + ')')
   availableTasks.forEach((task) => {
-    let availableTaskCard
-    let editLinks
-    availableTaskCard = task.createGroupTaskCards();
-    $('#available-tasks').append(availableTaskCard);
-    editLinks = task.taskCardAdminLinks();
-    $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
-    task.attachTaskEditListeners(function() {
-      task.attachTaskEditFormListeners(getGroupData);
-    });
+    task.createGroupShowTaskCards('#available-tasks');
   });
   assignedTasks.forEach((task) => {
-    let assignedTaskCard
-    let editLinks
-    assignedTaskCard = task.createGroupTaskCards();
-    $('#assigned-tasks').append(assignedTaskCard);
-    editLinks = task.taskCardAdminLinks();
-    $('.task-links[data-taskId="' + task.id + '"]').append(editLinks);
-    task.attachTaskEditListeners(function() {
-      task.attachTaskEditFormListeners(getGroupData);
-    });
+    task.createGroupShowTaskCards('#assigned-tasks');
   });
   completedTasks.forEach((task) => {
-    task.addEditLinksToTaskCards();
+    task.createGroupShowTaskCards('#completed-tasks');
   });
 }
 
@@ -150,6 +135,19 @@ function attachInvitationFormListener() {
     getInvitationForm.done((resp) => {
       $('.invitation-form-frame').empty();
       $('.invitation-form-frame').append(resp);
+    });
+  });
+}
+
+function attachCreateTaskFormListener() {
+  const groupId = $('#group_show').attr('data-groupid');
+  $('#create-task-button').click((e) => {
+    e.preventDefault();
+    const getTaskForm = $.get('/groups/' + groupId + '/tasks/new');
+    getTaskForm.done((resp) => {
+      $('.task-form-frame').empty();
+      $('.task-form-frame').append('<h3>Create Task</h3>');
+      $('.task-form-frame').append(resp);
     });
   });
 }

@@ -118,11 +118,11 @@ function createTask() {
       });
     }
 
-    addEditLinksToTaskCards() {
+    createGroupShowTaskCards(selector) {
       let taskCard
       let editLinks
       taskCard = this.createGroupTaskCards();
-      $('#completed-tasks').append(taskCard);
+      $(selector).append(taskCard);
       editLinks = this.taskCardAdminLinks();
       $('.task-links[data-taskId="' + this.id + '"]').append(editLinks);
       this.attachTaskEditListeners(() => {

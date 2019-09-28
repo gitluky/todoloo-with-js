@@ -16,12 +16,10 @@
 <% end %>
 
 <%= tag.ul class: "nav nav-pills justify-content-center ml-5 mr-n5" do %>
-  <%= link_to 'Post an Announcement', new_group_announcement_path(@group), class: 'nav-item nav-link ml-5 btn btn-outline-primary mr-2' %>
-  <%= link_to 'Send an Invitation', new_group_invitation_path(@group), class: 'nav-item nav-link ml-5 btn btn-outline-primary mr-2', id: 'send-invitation' %>
-  <%= tag.div class: "col-2 ml-5" do %>
-    <%= render partial: 'new_task_dropdown', locals: { group: @group, task: @task, members: @members, dropdown_name: 'Create Task', button_name: 'Create' } %>
-  <% end %>
-  <%= link_to 'All Completed Tasks', group_completed_tasks_path(@group), class: 'nav-item nav-link ml-5 btn btn-outline-primary mr-2' %>
+  <%= link_to 'Post an Announcement', new_group_announcement_path(@group), class: 'nav-item nav-link btn btn-outline-primary mr-2' %>
+  <%= link_to 'Send an Invitation', new_group_invitation_path(@group), class: 'nav-item nav-link btn btn-outline-primary mr-2', id: 'send-invitation' %>
+  <%= link_to 'Create Task', '#', class: 'nav-item nav-link btn btn-outline-primary mr-2',  id: 'create-task-button' %>
+  <%= link_to 'All Completed Tasks', group_completed_tasks_path(@group), class: 'nav-item nav-link btn btn-outline-primary mr-2' %>
 <% end %>
 
 <%= tag.div class: 'mt-5 mx-auto col-lg-6 task-form-frame announcement-form-frame invitation-form-frame' %>

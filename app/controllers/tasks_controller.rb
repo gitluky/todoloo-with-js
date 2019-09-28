@@ -5,6 +5,12 @@ class TasksController < ApplicationController
   before_action :validate_user_group_membership
   before_action :check_edit_privileges, only: [:edit, :update, :destroy]
 
+  def new
+    @task = @group.tasks.build
+    @members = @group.users
+    render partial: 'task_form', locals: { task: @task, group: @group, members: @members }
+  end
+
   def create
     @task = @group.tasks.build(task_params)
     @task.created_by = current_user
@@ -29,7 +35,7 @@ class TasksController < ApplicationController
   def edit
     @group = @task.group
     @members = @group.users
-    render partial: 'edit_form', locals: { task: @task, group: @group, members: @members }
+    render partial: 'task_form', locals: { task: @task, group: @group, members: @members }
   end
 
   def update

@@ -1,4 +1,4 @@
-<%= tag.div class: 'row justify-content-center border border-dark rounded py-3' do %>
+<%= tag.div class: 'row justify-content-center border border-light rounded py-3' do %>
   <%= form_for([group, invitation]) do |f| %>
     <%= f.text_field :recipient_email, list: "user_names" %>
      <datalist id="user_names">

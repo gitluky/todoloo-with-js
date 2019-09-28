@@ -1,4 +1,3 @@
-<%= tag.h3 "Edit"%>
 <%= form_for([group, task], html: { class: 'form-group', id: 'task-edit-form' }) do |f| %>
   <%= tag.div class: 'form-group' do %>
     Name: <%= f.text_field :name, class: 'form-control' %>
