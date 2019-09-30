@@ -168,6 +168,10 @@ function attachInvitationFormListener() {
     getInvitationForm.done((resp) => {
       $('.group-form-frame').empty();
       $('.group-form-frame').append(resp);
+      $('#cancel_invitation').click(function(e){
+        e.preventDefault();
+        $('.group-form-frame').empty();
+      });
     });
   });
 }
@@ -181,6 +185,10 @@ function attachCreateTaskFormListener() {
       $('.group-form-frame').empty();
       $('.group-form-frame').append('<h3>Create Task</h3>');
       $('.group-form-frame').append(resp);
+      $('#cancel_task_form').click(function(e){
+        e.preventDefault();
+        $('.group-form-frame').empty();
+      });
     });
   });
 }
@@ -194,6 +202,10 @@ function attachPostAnnouncementListener() {
       $('.group-form-frame').empty();
       $('.group-form-frame').append(resp);
       attachPostAnnouncementFormListener(getGroupData)
+      $('#cancel_announcement').click(function(e){
+        e.preventDefault();
+        $('.group-form-frame').empty();
+      });
     });
   });
 }
