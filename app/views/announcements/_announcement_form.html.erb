@@ -1,27 +1,21 @@
 <%= tag.h3 'Post an Accouncement to the Group.', class: 'text-center mt-5' %>
 <%= tag.div class: 'row justify-content-center mt-4' do %>
-  <%= tag.div class: 'col-12 text-center' do %>
-    <%= form_for([group, announcement], class: 'form') do |f| %>
-
-      <%= tag.div class: 'row justify-content-center mr-5' do %>
-        <%= tag.div class: 'col-2' do %>
-          <%= tag.div class: 'text-right' do %>
-            <%= tag.div class: "form-group" do %>
-              <%= f.label :title %><br />
-              <%= f.label :content, 'Announcement', class: 'mt-3' %>
-            <% end %>
-          <% end %>
-        <% end %>
-        <%= tag.div class: 'col-6 mr-5' do %>
-          <%= tag.div class: 'text-left' do %>
-            <%= tag.div class: "form-group" do %>
-              <%= f.text_field :title, class: 'form-control'  %>
-              <%= f.text_area :content, class: 'form-control mt-3'%>
-            <% end %>
-          <% end %>
-        <% end %>
+  <%= tag.div class: 'col-8' do %>
+    <%= form_for([group, announcement], class: 'form', id: 'announcement-form') do |f| %>
+      <%= tag.div class: "form-group" do %>
+        <%= f.label :title %><br />
+        <%= f.text_field :title, class: 'form-control'  %>
       <% end %>
-      <%= f.submit 'Post Announcement', class: 'btn btn-primary'%>
+
+      <%= tag.div class: "form-group" do %>
+        <%= f.label :content, 'Announcement' %>
+        <%= f.text_area :content, class: 'form-control'%>
+      <% end %>
+
+      <%= tag.div class: 'text-center' do %>
+        <%= f.submit 'Post Announcement', class: 'btn btn-primary', id: 'post-announcement-submit' %>
+      <% end %>
+      
     <% end %>
   <% end %>
 <% end %>

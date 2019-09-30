@@ -19,14 +19,14 @@
   <%= link_to 'Post an Announcement', new_group_announcement_path(@group), class: 'nav-item nav-link btn btn-outline-primary mr-2', id: 'post-announcement-button' %>
   <%= link_to 'Send an Invitation', new_group_invitation_path(@group), class: 'nav-item nav-link btn btn-outline-primary mr-2', id: 'send-invitation-button' %>
   <%= link_to 'Create Task', '#', class: 'nav-item nav-link btn btn-outline-primary mr-2',  id: 'create-task-button' %>
-  <%= link_to 'All Completed Tasks', group_completed_tasks_path(@group), class: 'nav-item nav-link btn btn-outline-primary mr-2' %>
 <% end %>
 
-<%= tag.div class: 'mt-5 mx-auto col-lg-6 task-form-frame announcement-form-frame invitation-form-frame' %>
+<%= tag.div class: 'mt-5 mx-auto col-lg-6 group-form-frame' %>
+
 
 <%= tag.div class: 'container-fluid' do %>
   <%= tag.div class: 'row text-center mt-4' do %>
-    <%= tag.div class:'col-md-2' do %>
+    <%= tag.div class:'col-lg-2', id: 'member-list' do %>
       <%= tag.div class: 'text-right' do %>
 
         <%= tag.h6 'Admins:' %>
@@ -36,7 +36,7 @@
         <%= tag.div id: 'members' %>
 
         <% if !@invitations.empty? %>
-          <%= tag.h6 'Invitations:', class: 'mt-4' %>
+          <%= tag.h6 'Invitations:', class: 'mt-4', id: 'invitations'%>
           <% @invitations.each do |invitation| %>
             <%= tag.li class: 'mt-2' do %>
               <%= invitation.recipient.name %> <%= display_avatar(invitation.recipient, 'xs') %><br />
@@ -49,19 +49,24 @@
             <% end %>
           <% end %>
         <% end %>
+
       <% end %>
     <% end %>
 
 
-  <%= tag.div class:'col-lg-3 text-left', id: 'announcements' %>
+  <%= tag.div class:'col-lg-3 text-left group-show-frame', id: 'announcements' %>
+
   <%= tag.div class:'col-lg-2' do %>
-    <%= tag.p 'Available', id: 'available-tasks' %>
+    <%= tag.div  id: 'available-tasks-title' %>
+    <%= tag.div class: 'group-show-frame px-1', id: 'available-tasks' %>
   <% end %>
   <%= tag.div class:'col-lg-2' do %>
-    <%= tag.p 'Assigned', id: 'assigned-tasks' %>
+    <%= tag.div id: 'assigned-tasks-title' %>
+    <%= tag.div class: 'group-show-frame px-1', id: 'assigned-tasks' %>
   <% end %>
   <%= tag.div class:'col-lg-2' do %>
-    <%= tag.p 'Completed', id: 'completed-tasks' %>
+    <%= tag.div id: 'completed-tasks-title'%>
+    <%= tag.div class: 'group-show-frame px-1', id: 'completed-tasks' %>
   <% end %>
 
 

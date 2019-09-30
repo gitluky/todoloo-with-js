@@ -39,3 +39,37 @@ textarea.form-control {
   width: 80%;
   overflow-y: auto;
 }
+
+.group-show-frame {
+  height: calc(100vh - 250px);
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 991px) {
+  .group-show-frame {
+    height: auto;
+    overflow-y: visible;
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #c1c1c1;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}

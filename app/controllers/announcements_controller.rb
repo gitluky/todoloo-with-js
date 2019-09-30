@@ -18,7 +18,7 @@ class AnnouncementsController < ApplicationController
     @announcement = @group.announcements.build(announcement_params)
     @announcement.user = current_user
     @announcement.save
-    redirect_to group_path(@group)
+    render json: @announcement
   end
 
   def edit

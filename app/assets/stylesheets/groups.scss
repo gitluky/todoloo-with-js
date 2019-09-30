@@ -34,3 +34,9 @@ li {
   background: none;
   border: none;
 }
+
+@media screen and (max-width: 991px) {
+  #member-list {
+    display: none;
+  }
+}

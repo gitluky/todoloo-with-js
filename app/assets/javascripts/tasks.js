@@ -29,51 +29,56 @@ function createTask() {
     }
 
     createGroupTaskCards() {
+      let editLinks;
       let taskCardHtml = `
       <div class="card mb-2">
         <div class="card-body">
           <h5 class="card-title">${this.name}</h5>
           <div class="card-text" id="task_section">
-            ${this.description}<br>`
+            ${this.description}<br>`;
       if (!!this["assigned-to-name"]) {
         taskCardHtml += `Assigned to: ${this["assigned-to-name"]}<br>`
       }
+
       taskCardHtml += `Status: ${this.status}<br>
                   Created by: ${this["created-by-name"]}
                 <ul class="nav justify-content-center task-links" data-taskId="${this.id}">
-                  <a class="nav-item nav-link px-1" href="/tasks/${this.id}">View</a>
-                  </ul>
-                </div>
-              </div>
-            </div>`
-      return taskCardHtml;
-    }
-
-    taskCardAdminLinks() {
-      let taskCardHtml = `
-      <a class="nav-item nav-link px-1 edit-task-link" href="#" data-groupId="${this["group-id"]}" data-taskId="${this.id}">Edit</a>`
-      let editLinks
+                  <a class="nav-item nav-link px-1" href="/tasks/${this.id}">View</a>`
 
       if (this.status === "Available") {
         editLinks = `<a class="nav-item nav-link px-2" rel="nofollow" data-method="post" href="/volunteer/${this.id}">Volunteer</a>`
         taskCardHtml += editLinks;
-      } else if (this.status === "Assigned") {
-        editLinks = `<a class="nav-item nav-link px-2" rel="nofollow" data-method="post" href="/drop_task/${this.id}">Drop</a>
-        <a class="nav-item nav-link px-1" href="/tasks/${this.id}/complete">Complete</a>`
-        taskCardHtml += editLinks;
-      } else if (this.status === "Completed") {
-        editLinks = `<a class="nav-item nav-link px-1" href="/tasks/${this.id}/incomplete">Incomplete</a>`
-        taskCardHtml += editLinks;
       }
+
+      taskCardHtml += `</ul>
+                </div>
+              </div>
+            </div>`
+
       return taskCardHtml;
     }
+
+    taskCardEditLink() {
+      return `<a class="nav-item nav-link px-1 edit-task-link" href="#" data-groupId="${this["group-id"]}" data-taskId="${this.id}">Edit</a>`
+    }
+
+    taskCardDropLink() {
+      return `<a class="nav-item nav-link px-2" rel="nofollow" data-method="post" href="/drop_task/${this.id}">Drop</a>
+      <a class="nav-item nav-link px-1" href="/tasks/${this.id}/complete">Complete</a>`
+    }
+
+    taskCardIncompleteLink() {
+      return `<a class="nav-item nav-link px-1" href="/tasks/${this.id}/incomplete">Incomplete</a>`
+    }
+
+
 
     attachTaskEditListeners(callback) {
       const taskId = this.id;
       const groupId = this["group-id"];
       $('.edit-task-link[data-taskId="' + taskId + '"]').click(function (event) {
         event.preventDefault();
-        $('.task-form-frame').empty();
+        $('.group-form-frame').empty();
         let taskEditForm = $.get('/groups/' + groupId + '/tasks/' + taskId + '/edit');
         taskEditForm.done(function(data) {
           let taskFormHtml = `
@@ -82,12 +87,12 @@ function createTask() {
             ${data}
             </div>
           </div>`
-          $('.task-form-frame').html(taskFormHtml);
+          $('.group-form-frame').html(taskFormHtml);
           $('#task-edit-form').attr('data-groupId', groupId);
           $('#task-edit-form').attr('data-taskId', taskId);
           $("body,html").animate(
             {
-              scrollTop: $('.task-form-frame').offset().top
+              scrollTop: $('.group-form-frame').offset().top
             }, 800);
           callback();
         });
@@ -98,7 +103,7 @@ function createTask() {
     attachTaskEditFormListeners(callback) {
       $('#cancel_task_form').click(function(e){
         e.preventDefault();
-        $('.task-form-frame').empty();
+        $('.group-form-frame').empty();
       });
       $('#task-edit-form').submit(function(event) {
         event.preventDefault();
@@ -111,7 +116,7 @@ function createTask() {
           url: '/groups/' + groupId + '/tasks/' + taskId,
           data: values,
           success : function() {
-            $('.task-form-frame').empty();
+            $('.group-form-frame').empty();
             callback();
           }
         });
@@ -123,11 +128,6 @@ function createTask() {
       let editLinks
       taskCard = this.createGroupTaskCards();
       $(selector).append(taskCard);
-      editLinks = this.taskCardAdminLinks();
-      $('.task-links[data-taskId="' + this.id + '"]').append(editLinks);
-      this.attachTaskEditListeners(() => {
-        this.attachTaskEditFormListeners(getGroupData);
-      });
     }
 
 
