@@ -25,25 +25,26 @@
 
 
 <%= tag.div class: 'container-fluid' do %>
-  <%= tag.div class: 'row text-center border-top mt-3' do %>
+  <%= tag.hr %>
+  <%= tag.div class: 'row text-center mt-3' do %>
     <%= tag.div class: 'col-md-2' do %>
 
     <% end %>
     <%= tag.div class: 'col-lg-3' do %>
-
+      Announcements
     <% end %>
     <%= tag.div class: 'col-lg-2' do %>
-
+      <%= tag.div  id: 'available-tasks-title' %>
     <% end %>
     <%= tag.div class: 'col-lg-2' do %>
-
+      <%= tag.div id: 'assigned-tasks-title' %>
     <% end %>
     <%= tag.div class: 'col-lg-2' do %>
-
+      <%= tag.div id: 'completed-tasks-title'%>
     <% end %>
   <% end %>
 
-  <%= tag.div class: 'row text-center mt-3' do %>
+  <%= tag.div class: 'row text-center mt-1' do %>
     <%= tag.div class:'col-lg-2', id: 'member-list' do %>
       <%= tag.div class: 'text-right' do %>
 
@@ -75,15 +76,15 @@
   <%= tag.div class:'col-lg-3 text-left group-show-frame', id: 'announcements' %>
 
   <%= tag.div class:'col-lg-2' do %>
-    <%= tag.div  id: 'available-tasks-title' %>
+
     <%= tag.div class: 'group-show-frame px-1', id: 'available-tasks' %>
   <% end %>
   <%= tag.div class:'col-lg-2' do %>
-    <%= tag.div id: 'assigned-tasks-title' %>
+
     <%= tag.div class: 'group-show-frame px-1', id: 'assigned-tasks' %>
   <% end %>
   <%= tag.div class:'col-lg-2' do %>
-    <%= tag.div id: 'completed-tasks-title'%>
+
     <%= tag.div class: 'group-show-frame px-1', id: 'completed-tasks' %>
   <% end %>
 

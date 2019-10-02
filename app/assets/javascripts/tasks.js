@@ -88,8 +88,8 @@ function createTask() {
             </div>
           </div>`
           $('.group-form-frame').html(taskFormHtml);
-          $('#task-edit-form').attr('data-groupId', groupId);
-          $('#task-edit-form').attr('data-taskId', taskId);
+          $('#task-form').attr('data-groupId', groupId);
+          $('#task-form').attr('data-taskId', taskId);
           $("body,html").animate(
             {
               scrollTop: $('.group-form-frame').offset().top
@@ -105,10 +105,10 @@ function createTask() {
         e.preventDefault();
         $('.group-form-frame').empty();
       });
-      $('#task-edit-form').submit(function(event) {
+      $('#task-form').submit(function(event) {
         event.preventDefault();
-        const groupId = $('#task-edit-form').attr('data-groupId')
-        const taskId = $('#task-edit-form').attr('data-taskId')
+        const groupId = $('#task-form').attr('data-groupId')
+        const taskId = $('#task-form').attr('data-taskId')
         const values = $(this).serialize();
 
         const editTask = $.ajax({

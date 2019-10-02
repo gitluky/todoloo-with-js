@@ -18,12 +18,13 @@ class TasksController < ApplicationController
       @task.update_assignment('Assigned')
     end
     @task.save
-    redirect_to group_path(@task.group, anchor: 'task_section')
+    render json: @task
   end
 
   def completed_tasks
     @completed_tasks = @group.completed_tasks
     @members = @group.users
+    render json: @completed_tasks
   end
 
   def show

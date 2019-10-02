@@ -1,7 +1,7 @@
 $('.groups.show').ready(function() {
  getGroupData();
  attachInvitationFormListener();
- attachCreateTaskFormListener();
+ attachCreateTaskListener();
  attachPostAnnouncementListener();
 });
 
@@ -25,7 +25,7 @@ function isAdmin(resp) {
   return resp['data']['attributes']['current-member']['admin'] === true ? true : false
 }
 
-function hasPrivilege(resp, editor_id) {
+function hasEditPrivilege(resp, editor_id) {
   return resp['data']['attributes']['current-member']['user-id'] === editor_id ? true : false
 }
 
@@ -119,11 +119,12 @@ function createTaskLists(resp) {
   const completedTasks = resp['data']['attributes']['formatted-recent-completed-tasks'].map((x) => new Task(x));
   $('#available-tasks-title').text('Available (' + availableTasks.length + ')')
   $('#assigned-tasks-title').text('Assigned (' + assignedTasks.length + ')')
-  $('#completed-tasks-title').text('Completed (' + completedTasks.length + ')')
+  $('#completed-tasks-title').text('Completed')
   $('#completed-tasks-title').append('<small><a href="#" class="ml-3" id="view-all-completed-tasks">View All</a></small>')
+  attachViewAllCompletedTasksListener(resp);
   availableTasks.forEach((task) => {
     task.createGroupShowTaskCards('#available-tasks');
-    if (isAdmin(resp) || hasPrivilege(resp, task['created-by-id'])) {
+    if (isAdmin(resp) || hasEditPrivilege(resp, task['created-by-id'])) {
       let editLink = task.taskCardEditLink();
       $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
       task.attachTaskEditListeners(() => {
@@ -133,14 +134,14 @@ function createTaskLists(resp) {
   });
   assignedTasks.forEach((task) => {
     task.createGroupShowTaskCards('#assigned-tasks');
-    if (isAdmin(resp) || hasPrivilege(resp, task['created-by-id'])) {
+    if (isAdmin(resp) || hasEditPrivilege(resp, task['created-by-id'])) {
       let editLink = task.taskCardEditLink();
       $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
       task.attachTaskEditListeners(() => {
         task.attachTaskEditFormListeners(getGroupData);
       });
     }
-    if (hasPrivilege(resp, task['assigned-to-id'])) {
+    if (hasEditPrivilege(resp, task['assigned-to-id'])) {
       let dropLink = task.taskCardDropLink();
       $('.task-links[data-taskId="' + task.id + '"]').append(dropLink);
     }
@@ -148,7 +149,7 @@ function createTaskLists(resp) {
   });
   completedTasks.forEach((task) => {
     task.createGroupShowTaskCards('#completed-tasks');
-    if (isAdmin(resp) || hasPrivilege(resp, task['created-by-id'])) {
+    if (isAdmin(resp) || hasEditPrivilege(resp, task['created-by-id'])) {
       let editLink = task.taskCardEditLink();
       $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
       let incompleteLink = task.taskCardIncompleteLink();
@@ -176,7 +177,7 @@ function attachInvitationFormListener() {
   });
 }
 
-function attachCreateTaskFormListener() {
+function attachCreateTaskListener() {
   const groupId = $('#group_show').attr('data-groupid');
   $('#create-task-button').click((e) => {
     e.preventDefault();
@@ -185,13 +186,29 @@ function attachCreateTaskFormListener() {
       $('.group-form-frame').empty();
       $('.group-form-frame').append('<h3>Create Task</h3>');
       $('.group-form-frame').append(resp);
-      $('#cancel_task_form').click(function(e){
-        e.preventDefault();
-        $('.group-form-frame').empty();
-      });
+      attachCreateTaskFormListeners();
     });
   });
 }
+
+function attachCreateTaskFormListeners() {
+  const groupId = $('#group_show').attr('data-groupid');
+  $('#cancel_task_form').click(function(e){
+    e.preventDefault();
+    $('.group-form-frame').empty();
+  });
+  $('#task-form').submit((e) => {
+    e.preventDefault();
+    const values = $('#task-form').serialize();
+    const createTask = $.post('/groups/' + groupId + '/tasks/', values)
+    createTask.done(() => {
+      $('.group-form-frame').empty();
+      getGroupData();
+    });
+  })
+}
+
+
 
 function attachPostAnnouncementListener() {
   const groupId = $('#group_show').attr('data-groupid');
@@ -221,4 +238,31 @@ function attachPostAnnouncementFormListener(callback) {
       callback();
     });
   })
+}
+
+function attachViewAllCompletedTasksListener(data) {
+
+  const groupId = $('#group_show').attr('data-groupid');
+  $('#view-all-completed-tasks').click((e) => {
+    e.preventDefault();
+    const getCompletedTasks = $.get('/groups/' + groupId + '/tasks/completed_tasks');
+    getCompletedTasks.done((resp) => {
+      $('#completed-tasks').empty();
+      const Task = createTask();
+      const completedTasks = resp['data'].map((x) => new Task(x.attributes));
+      $('#completed-tasks-title').text('Completed (' + completedTasks.length + ')')
+      completedTasks.forEach((task) => {
+        task.createGroupShowTaskCards('#completed-tasks');
+        if (isAdmin(data) || hasEditPrivilege(data, task['created-by-id'])) {
+          let editLink = task.taskCardEditLink();
+          $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
+          let incompleteLink = task.taskCardIncompleteLink();
+          $('.task-links[data-taskId="' + task.id + '"]').append(incompleteLink);
+          task.attachTaskEditListeners(() => {
+            task.attachTaskEditFormListeners(getGroupData);
+          });
+        }
+      });
+    });
+  });
 }
