@@ -1,6 +1,6 @@
 $('.groups.show').ready(function() {
  getGroupData();
- attachInvitationFormListener();
+ attachSendInvitationListener();
  attachCreateTaskListener();
  attachPostAnnouncementListener();
 });
@@ -12,6 +12,7 @@ function getGroupData() {
   $('#available-tasks').empty();
   $('#assigned-tasks').empty();
   $('#completed-tasks').empty();
+  $('.form-error-messages').empty();
   const groupId = $('#group_show').attr('data-groupid');
   const getData = $.get('/groups/' + groupId + '/group_data');
    getData.done((resp) => {
@@ -161,7 +162,7 @@ function createTaskLists(resp) {
   });
 }
 
-function attachInvitationFormListener() {
+function attachSendInvitationListener() {
   const groupId = $('#group_show').attr('data-groupid');
   $('#send-invitation-button').click((e) => {
     e.preventDefault();
@@ -169,12 +170,33 @@ function attachInvitationFormListener() {
     getInvitationForm.done((resp) => {
       $('.group-form-frame').empty();
       $('.group-form-frame').append(resp);
-      $('#cancel_invitation').click(function(e){
-        e.preventDefault();
-        $('.group-form-frame').empty();
-      });
+      attachInvitationFormListeners();
     });
   });
+}
+
+function attachInvitationFormListeners() {
+  const groupId = $('#group_show').attr('data-groupId');
+  $('#cancel_invitation').click(function(e){
+    e.preventDefault();
+    $('.group-form-frame').empty();
+  });
+  $('#new_invitation').submit((e) => {
+    e.preventDefault();
+    const values = $('#new_invitation').serialize();
+    debugger;
+    const sendInvitation = $.post('/groups/' + groupId + '/invitations', values );
+    sendInvitation.done((resp) => {
+      if (!!resp['data']['attributes']['full-error-messages']) {
+        resp['data']['attributes']['full-error-messages'].forEach((message) => {
+          $('.form-error-messages').append(`<p class="py-0 my-0">${message}</p>`)
+        })
+      } else {
+        $('.group-form-frame').empty();
+        getGroupData();
+      }
+    })
+  })
 }
 
 function attachCreateTaskListener() {

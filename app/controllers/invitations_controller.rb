@@ -16,11 +16,8 @@ class InvitationsController < ApplicationController
     @users = User.all
     @invitation = @group.invitations.build(invitation_params)
     @invitation.sender = current_user
-    if @invitation.save
-      redirect_to group_path(@group), flash: { message: 'Invitation Sent.'}
-    else
-      render :new, flash: { message: 'Invitation not sent.' }
-    end
+    @invitation.save
+    render json: @invitation
   end
 
   def accept
