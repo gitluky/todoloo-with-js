@@ -4,6 +4,9 @@ class Task < ApplicationRecord
   belongs_to :assigned_to, class_name: 'User', optional: true
   has_many :notes
 
+  validates :name, presence: true
+  validates :description, presence: true
+
   def assigned?
     !!self.assigned_to_id
   end

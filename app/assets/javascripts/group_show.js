@@ -12,12 +12,13 @@ function getGroupData() {
   $('#available-tasks').empty();
   $('#assigned-tasks').empty();
   $('#completed-tasks').empty();
-  $('.form-error-messages').empty();
+  $('#invitations').empty();
   const groupId = $('#group_show').attr('data-groupid');
   const getData = $.get('/groups/' + groupId + '/group_data');
    getData.done((resp) => {
     createMemberList(resp);
-    displayGroupShowAnnouncements(resp);
+    displayInvitationsList(resp);
+    displayAnnouncementList(resp);
     createTaskLists(resp);
   });
 }
@@ -44,7 +45,7 @@ function createMemberList(resp) {
   }
 }
 
-function displayGroupShowAnnouncements(resp) {
+function displayAnnouncementList(resp) {
   const Announcement = createAnnouncement();
   const announcements = resp['data']['attributes']['announcements-in-order'].map(announcement => {
     return new Announcement(announcement);
@@ -52,7 +53,17 @@ function displayGroupShowAnnouncements(resp) {
   announcements.forEach((announcement) => {
     announcement.displayGroupAnnouncement();
   });
+}
 
+
+function displayInvitationsList(resp) {
+  const Invitation = createInvitation();
+  const invitations = resp['data']['attributes']['formatted-invitations'].map(invitation => {
+    return new Invitation(invitation)
+  });
+  invitations.forEach((invitation) => {
+    invitation.displayGroupInvitation();
+  });
 }
 
 function displayAdminLinksForAdminList() {
@@ -184,17 +195,10 @@ function attachInvitationFormListeners() {
   $('#new_invitation').submit((e) => {
     e.preventDefault();
     const values = $('#new_invitation').serialize();
-    debugger;
     const sendInvitation = $.post('/groups/' + groupId + '/invitations', values );
     sendInvitation.done((resp) => {
-      if (!!resp['data']['attributes']['full-error-messages']) {
-        resp['data']['attributes']['full-error-messages'].forEach((message) => {
-          $('.form-error-messages').append(`<p class="py-0 my-0">${message}</p>`)
-        })
-      } else {
-        $('.group-form-frame').empty();
-        getGroupData();
-      }
+      console.log(resp)
+      displayErrorMessages(resp);
     })
   })
 }
@@ -223,7 +227,7 @@ function attachCreateTaskFormListeners() {
     e.preventDefault();
     const values = $('#task-form').serialize();
     const createTask = $.post('/groups/' + groupId + '/tasks/', values)
-    createTask.done(() => {
+    createTask.done((resp) => {
       $('.group-form-frame').empty();
       getGroupData();
     });
@@ -287,4 +291,15 @@ function attachViewAllCompletedTasksListener(data) {
       });
     });
   });
+}
+
+function displayErrorMessages(resp) {
+  $('.form-error-messages').empty();
+  if (resp['data']['attributes']['full-error-messages'].length > 0) {
+    resp['data']['attributes']['full-error-messages'].forEach((message) => {
+      $('.form-error-messages').append(`<p class="py-0 my-0">${message}</p>`)
+    })
+  } else {
+    getGroupData();
+  }
 }

@@ -21,7 +21,6 @@
   <%= link_to 'Create Task', '#', class: 'nav-item nav-link btn btn-outline-primary mr-2',  id: 'create-task-button' %>
 <% end %>
 
-<%= tag.div class: 'mx-auto col-lg-6 mt-3 text-center form-error-messages' %>
 <%= tag.div class: 'mt-3 mx-auto col-lg-6 group-form-frame' %>
 
 
@@ -58,18 +57,8 @@
         <%= tag.div id: 'members' %>
 
         <% if !@invitations.empty? %>
-          <%= tag.h6 'Invitations:', class: 'mt-4', id: 'invitations'%>
-          <% @invitations.each do |invitation| %>
-            <%= tag.li class: 'mt-2' do %>
-              <%= invitation.recipient.name %> <%= display_avatar(invitation.recipient, 'xs') %><br />
-              <%= tag.small class: 'text-muted' do %>
-                Sent by: <%= invitation.sender.name %><br />
-                <% if current_user.is_admin?(@group) || current_user == invitation.sender %>
-                  <%= link_to 'Cancel Invitation', group_invitation_path(invitation.group, invitation), method: 'delete' %>
-                <% end %>
-              <% end %>
-            <% end %>
-          <% end %>
+          <%= tag.h6 'Invitations:', class: 'mt-4'%>
+          <%= tag.div id: 'members', id: 'invitations' %>
         <% end %>
 
       <% end %>
