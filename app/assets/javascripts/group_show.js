@@ -55,7 +55,6 @@ function displayAnnouncementList(resp) {
   });
 }
 
-
 function displayInvitationsList(resp) {
   const Invitation = createInvitation();
   const invitations = resp['data']['attributes']['formatted-invitations'].map(invitation => {
@@ -157,7 +156,6 @@ function createTaskLists(resp) {
       let dropLink = task.taskCardDropLink();
       $('.task-links[data-taskId="' + task.id + '"]').append(dropLink);
     }
-
   });
   completedTasks.forEach((task) => {
     task.createGroupShowTaskCards('#completed-tasks');
@@ -197,7 +195,6 @@ function attachInvitationFormListeners() {
     const values = $('#new_invitation').serialize();
     const sendInvitation = $.post('/groups/' + groupId + '/invitations', values );
     sendInvitation.done((resp) => {
-      console.log(resp)
       displayErrorMessages(resp);
     })
   })
@@ -231,10 +228,8 @@ function attachCreateTaskFormListeners() {
       $('.group-form-frame').empty();
       getGroupData();
     });
-  })
+  });
 }
-
-
 
 function attachPostAnnouncementListener() {
   const groupId = $('#group_show').attr('data-groupid');
@@ -244,30 +239,30 @@ function attachPostAnnouncementListener() {
     getAnnouncementForm.done((resp) => {
       $('.group-form-frame').empty();
       $('.group-form-frame').append(resp);
-      attachPostAnnouncementFormListener(getGroupData)
-      $('#cancel_announcement').click(function(e){
-        e.preventDefault();
-        $('.group-form-frame').empty();
-      });
+      attachPostAnnouncementFormListener()
+
     });
   });
 }
 
-function attachPostAnnouncementFormListener(callback) {
+function attachPostAnnouncementFormListener() {
   const groupId = $('#group_show').attr('data-groupid');
+  $('#cancel_announcement').click(function(e){
+    e.preventDefault();
+    $('.group-form-frame').empty();
+  });
   $('#new_announcement').submit((e) => {
     e.preventDefault();
     const values = $('#new_announcement').serialize();
     const postAnnouncement = $.post('/groups/' + groupId + '/announcements/', values);
     postAnnouncement.done((resp) => {
-      $('.group-form-frame').empty();
-      callback();
+      displayErrorMessages(resp);
+
     });
   })
 }
 
 function attachViewAllCompletedTasksListener(data) {
-
   const groupId = $('#group_show').attr('data-groupid');
   $('#view-all-completed-tasks').click((e) => {
     e.preventDefault();
@@ -275,15 +270,15 @@ function attachViewAllCompletedTasksListener(data) {
     getCompletedTasks.done((resp) => {
       $('#completed-tasks').empty();
       const Task = createTask();
-      const completedTasks = resp['data'].map((x) => new Task(x.attributes));
+      const completedTasks = resp['data'].map((x) => new Task(x));
       $('#completed-tasks-title').text('Completed (' + completedTasks.length + ')')
       completedTasks.forEach((task) => {
         task.createGroupShowTaskCards('#completed-tasks');
-        if (isAdmin(data) || hasEditPrivilege(data, task['created-by-id'])) {
+        if (isAdmin(data) || hasEditPrivilege(data, task['attributes']['created-by-id'])) {
           let editLink = task.taskCardEditLink();
-          $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
+          $('.task-links[data-taskId="' + task.attributes.id + '"]').append(editLink);
           let incompleteLink = task.taskCardIncompleteLink();
-          $('.task-links[data-taskId="' + task.id + '"]').append(incompleteLink);
+          $('.task-links[data-taskId="' + task.attributes.id + '"]').append(incompleteLink);
           task.attachTaskEditListeners(() => {
             task.attachTaskEditFormListeners(getGroupData);
           });
@@ -300,6 +295,7 @@ function displayErrorMessages(resp) {
       $('.form-error-messages').append(`<p class="py-0 my-0">${message}</p>`)
     })
   } else {
+    $('.group-form-frame').empty();
     getGroupData();
   }
 }

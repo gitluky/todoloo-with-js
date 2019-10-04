@@ -25,10 +25,10 @@ function createInvitation() {
 
     displayGroupInvitation() {
       const invitationHtml = `<li class="mt-2">
-          ${this['recipient-name']} <img class="${this.avatar}"><br>
+          ${this['recipient-name']} <img src="${this.avatar}" class="avatar-xs"><br>
           <small class="text-muted">
           Sent by: ${this['sender-name']}<br>
-          <a rel="nofollow" data-method="delete" href="/groups/{${this['group-id']}}/invitations/${this.id}">Cancel Invitation</a>
+          <a rel="nofollow" data-method="delete" href="/groups/${this['group-id']}/invitations/${this.id}">Cancel Invitation</a>
         </small>
       </li>`
       $('#invitations').append(invitationHtml);

@@ -60,7 +60,7 @@ class GroupSerializer < ActiveModel::Serializer
 
   def formatted_invitations
     object.invitations.map do |invitation|
-      { sender_name: invitation.sender.name, recipient_name: invitation.recipient.name, avatar: rails_blob_path(invitation.recipient.avatar) }
+      { id: invitation.id, group_id: invitation.group.id, sender_name: invitation.sender.name, recipient_name: invitation.recipient.name, avatar: rails_blob_path(invitation.recipient.avatar) }
     end
   end
 
