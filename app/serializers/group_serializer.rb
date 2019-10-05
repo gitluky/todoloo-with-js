@@ -1,6 +1,6 @@
 class GroupSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :name, :description, :group_image, :invitations, :announcements_in_order, :formatted_assigned_tasks, :formatted_available_tasks, :formatted_recent_completed_tasks, :current_member, :errors, :members
+  attributes :id, :name, :description, :group_image, :formatted_invitations, :announcements_in_order, :formatted_assigned_tasks, :formatted_available_tasks, :formatted_recent_completed_tasks, :current_member, :errors, :members
 
   def group_image
     rails_blob_path(object.image) if object.image.attachment
@@ -55,6 +55,12 @@ class GroupSerializer < ActiveModel::Serializer
     object.memberships.map do |member|
       user = User.find_by(id: member.user_id)
       { id: member.id, group_id: member.group_id, user_id: user.id, name: user.name, admin: member.admin, avatar: rails_blob_path(user.avatar) }
+    end
+  end
+
+  def formatted_invitations
+    object.invitations.map do |invitation|
+      { id: invitation.id, group_id: invitation.group.id, sender_name: invitation.sender.name, recipient_name: invitation.recipient.name, avatar: rails_blob_path(invitation.recipient.avatar) }
     end
   end
 

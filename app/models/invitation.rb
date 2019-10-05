@@ -3,7 +3,7 @@ class Invitation < ApplicationRecord
   belongs_to :sender, class_name: 'User'
   belongs_to :recipient, class_name: 'User'
 
-  validates :recipient_id, presence: true
+  validates :recipient_id, presence: {message: 'not found.'}
   validates :recipient_id, uniqueness: { scope: :group_id }
 
   def group_name

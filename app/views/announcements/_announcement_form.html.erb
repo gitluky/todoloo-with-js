@@ -2,6 +2,7 @@
 <%= tag.div class: 'row justify-content-center mt-4' do %>
   <%= tag.div class: 'col-8' do %>
     <%= form_for([group, announcement], class: 'form', id: 'announcement-form') do |f| %>
+      <%= tag.div class: 'mx-auto col-lg-6 mt-3 text-center form-error-messages' %>
       <%= tag.div class: "form-group" do %>
         <%= f.label :title %><br />
         <%= f.text_field :title, class: 'form-control'  %>
@@ -13,7 +14,7 @@
       <% end %>
 
       <%= tag.div class: 'text-center' do %>
-        <%= f.submit 'Post Announcement', class: 'btn btn-primary', id: 'post-announcement-submit' %>
+        <%= f.submit 'Post Announcement', class: 'btn btn-primary', id: 'post-announcement-submit', data: { disable_with: false } %>
         <%= tag.a 'Cancel', href: '#', class: 'btn btn-danger', id: 'cancel_announcement' %>
       <% end %>
 

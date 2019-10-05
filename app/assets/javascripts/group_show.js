@@ -1,6 +1,6 @@
 $('.groups.show').ready(function() {
  getGroupData();
- attachInvitationFormListener();
+ attachSendInvitationListener();
  attachCreateTaskListener();
  attachPostAnnouncementListener();
 });
@@ -12,11 +12,13 @@ function getGroupData() {
   $('#available-tasks').empty();
   $('#assigned-tasks').empty();
   $('#completed-tasks').empty();
+  $('#invitations').empty();
   const groupId = $('#group_show').attr('data-groupid');
   const getData = $.get('/groups/' + groupId + '/group_data');
    getData.done((resp) => {
     createMemberList(resp);
-    displayGroupShowAnnouncements(resp);
+    displayInvitationsList(resp);
+    displayAnnouncementList(resp);
     createTaskLists(resp);
   });
 }
@@ -43,7 +45,7 @@ function createMemberList(resp) {
   }
 }
 
-function displayGroupShowAnnouncements(resp) {
+function displayAnnouncementList(resp) {
   const Announcement = createAnnouncement();
   const announcements = resp['data']['attributes']['announcements-in-order'].map(announcement => {
     return new Announcement(announcement);
@@ -51,7 +53,16 @@ function displayGroupShowAnnouncements(resp) {
   announcements.forEach((announcement) => {
     announcement.displayGroupAnnouncement();
   });
+}
 
+function displayInvitationsList(resp) {
+  const Invitation = createInvitation();
+  const invitations = resp['data']['attributes']['formatted-invitations'].map(invitation => {
+    return new Invitation(invitation)
+  });
+  invitations.forEach((invitation) => {
+    invitation.displayGroupInvitation();
+  });
 }
 
 function displayAdminLinksForAdminList() {
@@ -145,7 +156,6 @@ function createTaskLists(resp) {
       let dropLink = task.taskCardDropLink();
       $('.task-links[data-taskId="' + task.id + '"]').append(dropLink);
     }
-
   });
   completedTasks.forEach((task) => {
     task.createGroupShowTaskCards('#completed-tasks');
@@ -161,7 +171,7 @@ function createTaskLists(resp) {
   });
 }
 
-function attachInvitationFormListener() {
+function attachSendInvitationListener() {
   const groupId = $('#group_show').attr('data-groupid');
   $('#send-invitation-button').click((e) => {
     e.preventDefault();
@@ -169,12 +179,25 @@ function attachInvitationFormListener() {
     getInvitationForm.done((resp) => {
       $('.group-form-frame').empty();
       $('.group-form-frame').append(resp);
-      $('#cancel_invitation').click(function(e){
-        e.preventDefault();
-        $('.group-form-frame').empty();
-      });
+      attachInvitationFormListeners();
     });
   });
+}
+
+function attachInvitationFormListeners() {
+  const groupId = $('#group_show').attr('data-groupId');
+  $('#cancel_invitation').click(function(e){
+    e.preventDefault();
+    $('.group-form-frame').empty();
+  });
+  $('#new_invitation').submit((e) => {
+    e.preventDefault();
+    const values = $('#new_invitation').serialize();
+    const sendInvitation = $.post('/groups/' + groupId + '/invitations', values );
+    sendInvitation.done((resp) => {
+      displayErrorMessages(resp);
+    })
+  })
 }
 
 function attachCreateTaskListener() {
@@ -201,14 +224,12 @@ function attachCreateTaskFormListeners() {
     e.preventDefault();
     const values = $('#task-form').serialize();
     const createTask = $.post('/groups/' + groupId + '/tasks/', values)
-    createTask.done(() => {
+    createTask.done((resp) => {
       $('.group-form-frame').empty();
       getGroupData();
     });
-  })
+  });
 }
-
-
 
 function attachPostAnnouncementListener() {
   const groupId = $('#group_show').attr('data-groupid');
@@ -218,30 +239,30 @@ function attachPostAnnouncementListener() {
     getAnnouncementForm.done((resp) => {
       $('.group-form-frame').empty();
       $('.group-form-frame').append(resp);
-      attachPostAnnouncementFormListener(getGroupData)
-      $('#cancel_announcement').click(function(e){
-        e.preventDefault();
-        $('.group-form-frame').empty();
-      });
+      attachPostAnnouncementFormListener()
+
     });
   });
 }
 
-function attachPostAnnouncementFormListener(callback) {
+function attachPostAnnouncementFormListener() {
   const groupId = $('#group_show').attr('data-groupid');
+  $('#cancel_announcement').click(function(e){
+    e.preventDefault();
+    $('.group-form-frame').empty();
+  });
   $('#new_announcement').submit((e) => {
     e.preventDefault();
     const values = $('#new_announcement').serialize();
     const postAnnouncement = $.post('/groups/' + groupId + '/announcements/', values);
     postAnnouncement.done((resp) => {
-      $('.group-form-frame').empty();
-      callback();
+      displayErrorMessages(resp);
+
     });
   })
 }
 
 function attachViewAllCompletedTasksListener(data) {
-
   const groupId = $('#group_show').attr('data-groupid');
   $('#view-all-completed-tasks').click((e) => {
     e.preventDefault();
@@ -255,9 +276,15 @@ function attachViewAllCompletedTasksListener(data) {
         task.createGroupShowTaskCards('#completed-tasks');
         if (isAdmin(data) || hasEditPrivilege(data, task['attributes']['created-by-id'])) {
           let editLink = task.taskCardEditLink();
+<<<<<<< HEAD
           let incompleteLink = task.taskCardIncompleteLink();
           $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
           $('.task-links[data-taskId="' + task.id + '"]').append(incompleteLink);
+=======
+          $('.task-links[data-taskId="' + task.attributes.id + '"]').append(editLink);
+          let incompleteLink = task.taskCardIncompleteLink();
+          $('.task-links[data-taskId="' + task.attributes.id + '"]').append(incompleteLink);
+>>>>>>> 914c154b6843ff795da7260a5d7006625043ea50
           task.attachTaskEditListeners(() => {
             task.attachTaskEditFormListeners(getGroupData);
           });
@@ -265,4 +292,16 @@ function attachViewAllCompletedTasksListener(data) {
       });
     });
   });
+}
+
+function displayErrorMessages(resp) {
+  $('.form-error-messages').empty();
+  if (resp['data']['attributes']['full-error-messages'].length > 0) {
+    resp['data']['attributes']['full-error-messages'].forEach((message) => {
+      $('.form-error-messages').append(`<p class="py-0 my-0">${message}</p>`)
+    })
+  } else {
+    $('.group-form-frame').empty();
+    getGroupData();
+  }
 }

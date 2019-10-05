@@ -45,6 +45,10 @@ textarea.form-control {
   overflow-y: auto;
 }
 
+.form-error-messages {
+    color: red;
+}
+
 @media screen and (max-width: 991px) {
   .group-show-frame {
     height: auto;
