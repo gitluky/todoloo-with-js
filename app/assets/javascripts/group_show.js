@@ -225,8 +225,7 @@ function attachCreateTaskFormListeners() {
     const values = $('#task-form').serialize();
     const createTask = $.post('/groups/' + groupId + '/tasks/', values)
     createTask.done((resp) => {
-      $('.group-form-frame').empty();
-      getGroupData();
+      displayErrorMessages(resp);
     });
   });
 }
@@ -276,15 +275,11 @@ function attachViewAllCompletedTasksListener(data) {
         task.createGroupShowTaskCards('#completed-tasks');
         if (isAdmin(data) || hasEditPrivilege(data, task['attributes']['created-by-id'])) {
           let editLink = task.taskCardEditLink();
-<<<<<<< HEAD
           let incompleteLink = task.taskCardIncompleteLink();
           $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
           $('.task-links[data-taskId="' + task.id + '"]').append(incompleteLink);
-=======
           $('.task-links[data-taskId="' + task.attributes.id + '"]').append(editLink);
-          let incompleteLink = task.taskCardIncompleteLink();
           $('.task-links[data-taskId="' + task.attributes.id + '"]').append(incompleteLink);
->>>>>>> 914c154b6843ff795da7260a5d7006625043ea50
           task.attachTaskEditListeners(() => {
             task.attachTaskEditFormListeners(getGroupData);
           });
