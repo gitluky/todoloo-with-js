@@ -249,14 +249,14 @@ function attachViewAllCompletedTasksListener(data) {
     getCompletedTasks.done((resp) => {
       $('#completed-tasks').empty();
       const Task = createTask();
-      const completedTasks = resp['data'].map((x) => new Task(x.attributes));
+      const completedTasks = resp['data'].map((x) => new Task(x));
       $('#completed-tasks-title').text('Completed (' + completedTasks.length + ')')
       completedTasks.forEach((task) => {
         task.createGroupShowTaskCards('#completed-tasks');
-        if (isAdmin(data) || hasEditPrivilege(data, task['created-by-id'])) {
+        if (isAdmin(data) || hasEditPrivilege(data, task['attributes']['created-by-id'])) {
           let editLink = task.taskCardEditLink();
-          $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
           let incompleteLink = task.taskCardIncompleteLink();
+          $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
           $('.task-links[data-taskId="' + task.id + '"]').append(incompleteLink);
           task.attachTaskEditListeners(() => {
             task.attachTaskEditFormListeners(getGroupData);
