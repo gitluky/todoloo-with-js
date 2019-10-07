@@ -6,8 +6,6 @@ function createAnnouncement() {
       }
     }
 
-
-
     displayUserFeedAnnouncement() {
       let announcementHtml =`<div class="card mb-2" data-announcementid="${this.id}">
           <div class="card-body">
@@ -24,30 +22,31 @@ function createAnnouncement() {
     }
 
     displayGroupAnnouncement() {
-      let announcementHtml = `
+      return `
         <div class="card mb-2">
-          <div class="card-body">
+          <div class="card-body pb-1">
             <h5>${this.title}</h5>
             ${this.content}
-            <div class="row justify-content-center mt-2 announcement-admin-links">
-            </div>
+
           </div>
           <div class="card-footer">
             <small class="text-muted">
-              ${this["user-name"]} @
-              ${new Date(this['updated-at']).toLocaleString()}
+              <div class="row justify-content-start ml-2">
+                ${this["user-name"]} @
+                ${new Date(this['updated-at']).toLocaleString()}
+                <div class="ml-auto mr-2 announcement-admin-links" data-announcementId="${this.id}">
+                </div>
+              </div>
             </small>
           </div>
         </div>`
-        $('#announcements').append(announcementHtml);
     }
 
     displayEditAnnouncementsLinks() {
-      let adminLinksHtml = `
-      <a class="mr-5" href="/groups/1/announcements/3/edit">Edit</a>
+      return `
+      <a class="mr-2 py-0" href="/groups/1/announcements/3/edit">Edit</a>
       <a rel="nofollow" data-method="delete" href="/groups/1/announcements/3">Delete</a>
-        `;
-      $('.announcement-admin-links').append(adminLinksHtml);
+      `;
     }
 
 

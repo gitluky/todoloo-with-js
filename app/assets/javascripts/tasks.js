@@ -63,15 +63,17 @@ function createTask() {
     }
 
     taskCardDropLink() {
-      return `<a class="nav-item nav-link px-2" rel="nofollow" data-method="post" href="/drop_task/${this.id}">Drop</a>
-      <a class="nav-item nav-link px-1" href="/tasks/${this.id}/complete">Complete</a>`
+      return `<a class="nav-item nav-link px-2" rel="nofollow" data-method="post" href="/drop_task/${this.id}">Drop</a>`
+
+    }
+
+    taskCardCompleteLink() {
+      return `<a class="nav-item nav-link px-1" href="/tasks/${this.id}/complete">Complete</a>`
     }
 
     taskCardIncompleteLink() {
       return `<a class="nav-item nav-link px-1" href="/tasks/${this.id}/incomplete">Incomplete</a>`
     }
-
-
 
     attachTaskEditListeners(callback) {
       const taskId = this.id;
@@ -107,15 +109,21 @@ function createTask() {
       });
       $('#task-form').submit(function(event) {
         event.preventDefault();
-        const groupId = $('#task-form').attr('data-groupId')
-        const taskId = $('#task-form').attr('data-taskId')
+        const groupId = $('#task-form').attr('data-groupId');
+        const taskId = $('#task-form').attr('data-taskId');
+        const token = $('input[name="authenticity_token"]').val();
+        const taskName = $('#task_name').val();
+        const taskDescription = $('#task_description').val();
+        const taskAssignToId = $('#task_assigned_to_id').val();
         const values = $(this).serialize();
 
         const editTask = $.ajax({
-          type: "PATCH",
           url: '/groups/' + groupId + '/tasks/' + taskId,
+          type: "PATCH",
           data: values,
-          success : function() {
+          dataType: 'json',
+          success : function(resp) {
+            console.log(resp)
             $('.group-form-frame').empty();
             callback();
           }
@@ -129,8 +137,6 @@ function createTask() {
       taskCard = this.createGroupTaskCards();
       $(selector).append(taskCard);
     }
-
-
 
   }
 }

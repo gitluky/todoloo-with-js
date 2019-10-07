@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
 
-  before_action :set_task, only: [:show, :edit, :destroy, :volunteer, :drop_task, :complete, :incomplete, :check_edit_privileges, :set_group]
+  before_action :set_task, only: [:show, :edit, :destroy, :volunteer, :drop_task, :complete, :incomplete, :set_group]
   before_action :set_group
   before_action :validate_user_group_membership
   before_action :check_edit_privileges, only: [:edit, :update, :destroy]
@@ -95,6 +95,7 @@ class TasksController < ApplicationController
   end
 
   def check_edit_privileges
+    @task = Task.find_by(id: params[:id])
     if !current_user.is_admin?(@group) && current_user != @task.created_by
       redirect_to group_path(@group)
     end

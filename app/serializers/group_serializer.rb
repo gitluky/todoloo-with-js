@@ -37,7 +37,7 @@ class GroupSerializer < ActiveModel::Serializer
   def announcements_in_order
     object.announcements.order({ created_at: :desc }).map do |announcement|
       user = User.find_by(id: announcement.user_id) if announcement.user_id
-      announcement_hash = { title: announcement.title, content: announcement.content, group_id: announcement.group_id, updated_at: announcement.updated_at }
+      announcement_hash = { id: announcement.id, title: announcement.title, content: announcement.content, group_id: announcement.group_id, updated_at: announcement.updated_at }
       if user
          announcement_hash.merge(user_name: user.name, user_id: user.id )
        else
