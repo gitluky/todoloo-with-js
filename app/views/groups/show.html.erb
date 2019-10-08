@@ -56,10 +56,11 @@
         <%= tag.h6 'Members:', class: 'mt-4' %>
         <%= tag.div id: 'members' %>
 
-        <% if !@invitations.empty? %>
-          <%= tag.h6 'Invitations:', class: 'mt-4'%>
-          <%= tag.div id: 'members', id: 'invitations' %>
-        <% end %>
+
+        <%= tag.h6 'Invitations:', class: 'mt-4'%>
+
+        <%= tag.div id: 'invitations' %>
+
 
       <% end %>
     <% end %>

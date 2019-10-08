@@ -10,9 +10,9 @@ function getUserFeed() {
   const Invitation = createInvitation();
   $('.feed-frame').empty();
   $('.invitations').empty();
+  $('.tasks').empty();
   $.get('/user_feed', function(resp) {
     if (!resp['included']) {
-
       displayNoActivity();
     } else {
       const invitations = resp['included'].filter((x) => x.type === "invitations");
@@ -38,21 +38,30 @@ function getUserFeed() {
         const assigned_tasks = group["attributes"]["tasks-assigned-to-current-user"].map(function(assigned_task){
           return new Task(assigned_task);
         });
-        let taskHtml
         assigned_tasks.forEach(function(task) {
-          taskHtml = task.createUserFeedTaskCards();
+          const taskHtml = task.createUserFeedTaskCards();
           $('.tasks[data-groupid="' + task["group-id"] + '"]').append(taskHtml);
-          task.attachTaskEditListeners(function() {
-            task.attachTaskEditFormListeners(getUserFeed);
-          });
-
+          task.attachDropAndVolunteerListeners(getUserFeed);
+          if (isUserFeedGroupAdmin(group) || hasCreativePrivilege(resp['data']['id'], task['creator-id'])) {
+            let editLink = task.taskCardEditLink();
+            $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
+            task.attachTaskEditListeners(() => {
+              task.attachTaskEditFormListeners(getUserFeed);
+            });
+          }
         })
       });
     };
   });
 }
 
+function isUserFeedGroupAdmin(group) {
+  return group['attributes']['current-user-membership'][0]['admin'] == true ? true : false;
+}
 
+function hasCreativePrivilege(current_user_id, task_user_id) {
+  return current_user_id == task_user_id ? true : false;
+}
 
 
 function displayNoActivity() {

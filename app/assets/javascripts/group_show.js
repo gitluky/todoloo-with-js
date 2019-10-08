@@ -256,6 +256,7 @@ function createTaskLists(resp) {
   attachViewAllCompletedTasksListener(resp);
   availableTasks.forEach((task) => {
     task.createGroupShowTaskCards('#available-tasks');
+    task.attachDropAndVolunteerListeners(getGroupData);
     if (isAdmin(resp) || hasPrivilege(resp, task['created-by-id'])) {
       let editLink = task.taskCardEditLink();
       $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
@@ -278,6 +279,7 @@ function createTaskLists(resp) {
       let completeLink = task.taskCardCompleteLink();
       $('.task-links[data-taskId="' + task.id + '"]').append(dropLink);
       $('.task-links[data-taskId="' + task.id + '"]').append(completeLink);
+      task.attachDropAndVolunteerListeners(getGroupData);
     }
   });
   completedTasks.forEach((task) => {

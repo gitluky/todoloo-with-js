@@ -57,13 +57,13 @@ class TasksController < ApplicationController
   def volunteer
     @task.assigned_to = current_user
     @task.update_assignment("Assigned")
-    redirect_to group_path(@group, anchor: 'task_section')
+    render json: @task
   end
 
   def drop_task
     @task.assigned_to = nil
     @task.update_assignment("Available")
-    redirect_to group_path(@group, anchor: 'task_section')
+    render json: @task
   end
 
   def complete

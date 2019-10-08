@@ -7,7 +7,7 @@ function createTask() {
     }
 
     createUserFeedTaskCards() {
-      return `
+      let cardHTML = `
       <div class="card mb-2 col-lg-4 float-right">
         <div class="card-body">
           <h5 class="card-title">${this.name}</h5>
@@ -17,15 +17,16 @@ function createTask() {
             Status: ${this.status}<br>
             Created by: ${this["creator-user-name"]}
           <ul class="nav justify-content-center">
-            <a class="nav-item nav-link px-2" rel="nofollow" data-method="post" href="/drop_task/${this.id}">Drop</a>
             <a class="nav-item nav-link px-1" href="/tasks/${this.id}">View</a>
-            <a class="nav-item nav-link px-1 edit-task-form" href="#" data-groupId="${this["group-id"]}" data-taskId="${this.id}">Edit</a>
+            <a class="task-links" data-taskId="${this.id}"></a>`
+        cardHTML += this.taskCardDropLink();
+        cardHTML += `
             <a class="nav-item nav-link px-1" href="/tasks/${this.id}/complete">Complete</a>
             </ul>
           </div>
         </div>
       </div>`
-
+      return cardHTML;
     }
 
     createGroupTaskCards() {
@@ -46,7 +47,7 @@ function createTask() {
                   <a class="nav-item nav-link px-1" href="/tasks/${this.id}">View</a>`
 
       if (this.status === "Available") {
-        editLinks = `<a class="nav-item nav-link px-2" rel="nofollow" data-method="post" href="/volunteer/${this.id}">Volunteer</a>`
+        editLinks = `<a class="nav-item nav-link px-2 volunteer-link" data-taskId="${this.id}" href="#">Volunteer</a>`
         taskCardHtml += editLinks;
       }
 
@@ -63,8 +64,7 @@ function createTask() {
     }
 
     taskCardDropLink() {
-      return `<a class="nav-item nav-link px-2" rel="nofollow" data-method="post" href="/drop_task/${this.id}">Drop</a>`
-
+      return `<a class="nav-item nav-link px-2 drop-task-link" data-taskId="${this.id}" href="#">Drop</a>`
     }
 
     taskCardCompleteLink() {
@@ -75,9 +75,31 @@ function createTask() {
       return `<a class="nav-item nav-link px-1" href="/tasks/${this.id}/incomplete">Incomplete</a>`
     }
 
+    attachDropAndVolunteerListeners(callback) {
+      const taskId = this.id;
+      const groupId = this["group-id"];
+
+      $('.drop-task-link[data-taskId="' + taskId + '"]').click(function (event) {
+        event.preventDefault();
+        const dropTask = $.get('/drop_task/' + taskId);
+        dropTask.done(() => {
+          callback();
+        });
+      });
+
+      $('.volunteer-link[data-taskId="' + taskId + '"]').click(function (event) {
+        event.preventDefault();
+        const volunteer = $.get('/volunteer/' + taskId);
+        volunteer.done(() => {
+          callback();
+        });
+      });
+    }
+
     attachTaskEditListeners(callback) {
       const taskId = this.id;
       const groupId = this["group-id"];
+
       $('.edit-task-link[data-taskId="' + taskId + '"]').click(function (event) {
         event.preventDefault();
         $('.group-form-frame').empty();
@@ -98,7 +120,6 @@ function createTask() {
             }, 800);
           callback();
         });
-
       });
     }
 
