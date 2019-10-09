@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     resources :announcements, only: [:index, :new, :create, :edit, :update, :destroy]
     get '/users/:id/create_admin', to: 'users#create_admin', as: 'create_admin'
     get '/users/:id/delete_admin', to: 'users#delete_admin', as: 'delete_admin'
-    post '/users/:id/kick', to: 'users#kick', as: 'kick_member'
+    get '/users/:id/kick', to: 'users#kick', as: 'kick_member'
     get '/invitations/:id/accept', to: 'invitations#accept', as: 'accept_invitation'
   end
     get 'groups/:id/group_data', to: 'groups#group_data'

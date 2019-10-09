@@ -47,8 +47,8 @@ class GroupSerializer < ActiveModel::Serializer
   end
 
   def current_member
-    member = Membership.find_by(user_id: current_user.id)
-    { id: member.id, group_id: member.group_id, user_id: member.user_id, admin: member.admin }
+    member = Membership.find_by(user_id: current_user.id, group_id: object.id)
+    { membership_id: member.id, group_id: member.group_id, user_id: member.user_id, admin: member.admin }
   end
 
   def members
