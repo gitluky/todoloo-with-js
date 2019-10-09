@@ -1,4 +1,4 @@
-<%= tag.h3 'Post an Accouncement to the Group.', class: 'text-center mt-5' %>
+<%= tag.h3 '', class: 'text-center mt-5', id: 'announcement-form-title' %>
 <%= tag.div class: 'row justify-content-center mt-4' do %>
   <%= tag.div class: 'col-8' do %>
     <%= form_for([group, announcement], class: 'form', id: 'announcement-form') do |f| %>
@@ -14,8 +14,8 @@
       <% end %>
 
       <%= tag.div class: 'text-center' do %>
-        <%= f.submit 'Post Announcement', class: 'btn btn-primary', id: 'post-announcement-submit', data: { disable_with: false } %>
-        <%= tag.a 'Cancel', href: '#', class: 'btn btn-danger', id: 'cancel_announcement' %>
+        <%= f.submit class: 'btn btn-primary', id: 'post-announcement-submit', data: { disable_with: false } %>
+        <%= tag.a 'Cancel', href: '#', class: 'btn btn-danger cancel' %>
       <% end %>
 
     <% end %>

@@ -10,5 +10,5 @@
     Assign to (optional): <%= f.collection_select(:assigned_to_id, members, :id, :name, include_blank: true, html_options: { class: 'form-control'}) %>
   <% end %>
   <%=f.submit 'Submit', class: 'btn btn-primary', data:  {disable_with: false }%>
-  <%= tag.a 'Cancel', href: '#', class: 'btn btn-danger', id: 'cancel_task_form' %>
+  <%= tag.a 'Cancel', href: '#', class: 'btn btn-danger cancel' %>
 <% end %>

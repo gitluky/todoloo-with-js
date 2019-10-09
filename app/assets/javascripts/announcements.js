@@ -44,9 +44,63 @@ function createAnnouncement() {
 
     displayEditAnnouncementsLinks() {
       return `
-      <a class="mr-2 py-0" href="/groups/1/announcements/3/edit">Edit</a>
-      <a rel="nofollow" data-method="delete" href="/groups/1/announcements/3">Delete</a>
+      <a class="mr-2 py-0 edit-announcement" data-announcementid="${this.id}" href="#">Edit</a>
+      <a class="delete-announcement" data-announcementid="${this.id}" href="#">Delete</a>
       `;
+    }
+
+    attachEditAnnouncementListener(callback) {
+      $('.edit-announcement[data-announcementid="' + this.id + '"]').click((event) => {
+        event.preventDefault();
+        $('.group-form-frame').empty();
+        const getAnnouncementForm = $.get('/groups/' + this['group-id'] + '/announcements/' + this.id + '/edit');
+        getAnnouncementForm.done((form) => {
+          $('.group-form-frame').append(form);
+          $('#announcement-form-title').text('Edit Announcement');
+          $('#post-announcement-submit').text('Update Announcement');
+          callback();
+        })
+      });
+    }
+
+    attachDeleteAnnouncementListener(callback) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      const url = '/groups/' + this['group-id'] + '/announcements/' + this.id
+      $('.delete-announcement[data-announcementid="' + this.id + '"]').click((e) => {
+        e.preventDefault();
+        const deleteAnnouncement = $.ajax({
+          method: 'DELETE',
+          url: url,
+          success: function(resp) {
+            callback();
+          }
+        });
+      });
+    }
+
+    attachEditAnnouncementFormListener(callback, callback2) {
+      $('.cancel').click(function(e){
+        e.preventDefault();
+        $('.group-form-frame').empty();
+      });
+      $('#edit_announcement_' + this.id).submit((e) => {
+        e.preventDefault();
+        const values = $('#edit_announcement_' + this.id).serialize();
+        const editAnnouncement = $.ajax({
+          type: 'PATCH',
+          url: '/groups/' + this['group-id'] + '/announcements/' + this.id,
+          data: values,
+          dataType: 'json',
+          success: function(resp) {
+            callback(resp);
+            callback2();
+          }
+        })
+      })
     }
 
 

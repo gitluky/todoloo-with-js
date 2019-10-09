@@ -70,6 +70,8 @@ function attachPostAnnouncementListener() {
     getAnnouncementForm.done((resp) => {
       $('.group-form-frame').empty();
       $('.group-form-frame').append(resp);
+      $('#announcement-form-title').text('Post a New Announcement');
+      $('#post-announcement-submit').text('Post Announcement');
       attachPostAnnouncementFormListener();
     });
   });
@@ -91,12 +93,17 @@ function attachCreateTaskListener() {
 
 //Form Listeners
 
-function attachInvitationFormListeners() {
-  const groupId = $('#group_show').attr('data-groupId');
-  $('#cancel_invitation').click(function(e){
+function cancelFormListener() {
+  $('.cancel').click(function(e){
     e.preventDefault();
     $('.group-form-frame').empty();
   });
+}
+
+
+function attachInvitationFormListeners() {
+  const groupId = $('#group_show').attr('data-groupId');
+  cancelFormListener();
   $('#new_invitation').submit((e) => {
     e.preventDefault();
     const values = $('#new_invitation').serialize();
@@ -106,28 +113,23 @@ function attachInvitationFormListeners() {
     })
   })
 }
+
 function attachPostAnnouncementFormListener() {
   const groupId = $('#group_show').attr('data-groupid');
-  $('#cancel_announcement').click(function(e){
-    e.preventDefault();
-    $('.group-form-frame').empty();
-  });
+  cancelFormListener();
   $('#new_announcement').submit((e) => {
     e.preventDefault();
     const values = $('#new_announcement').serialize();
     const postAnnouncement = $.post('/groups/' + groupId + '/announcements/', values);
     postAnnouncement.done((resp) => {
       displayErrorMessages(resp);
-
     });
   })
 }
+
 function attachCreateTaskFormListeners() {
   const groupId = $('#group_show').attr('data-groupid');
-  $('#cancel_task_form').click(function(e){
-    e.preventDefault();
-    $('.group-form-frame').empty();
-  });
+  cancelFormListener();
   $('#task-form').submit((e) => {
     e.preventDefault();
     const values = $('#task-form').serialize();
@@ -137,6 +139,8 @@ function attachCreateTaskFormListeners() {
     });
   });
 }
+
+
 
 // Member list
 
@@ -219,6 +223,9 @@ function displayInvitationsList(resp) {
   const invitations = resp['data']['attributes']['formatted-invitations'].map(invitation => {
     return new Invitation(invitation)
   });
+  if (invitations.length > 0) {
+    $('#invitations').append('<h6 class="mt-4">Invitations:</h6>')
+  }
   invitations.forEach((invitation) => {
     invitation.displayGroupInvitation();
   });
@@ -238,6 +245,10 @@ function displayAnnouncementList(resp) {
       const announcementId = announcement.id;
       const adminLinks = announcement.displayEditAnnouncementsLinks();
       $('.announcement-admin-links[data-announcementid="' + announcementId + '"]').append(adminLinks);
+      announcement.attachEditAnnouncementListener(() => {
+        announcement.attachEditAnnouncementFormListener(displayErrorMessages, getGroupData)
+      });
+      announcement.attachDeleteAnnouncementListener(getGroupData);
     }
   });
 }
@@ -318,12 +329,13 @@ function attachViewAllCompletedTasksListener(data) {
           let incompleteLink = task.taskCardIncompleteLink();
           $('.task-links[data-taskId="' + task.id + '"]').append(editLink);
           $('.task-links[data-taskId="' + task.id + '"]').append(incompleteLink);
-          $('.task-links[data-taskId="' + task.attributes.id + '"]').append(editLink);
-          $('.task-links[data-taskId="' + task.attributes.id + '"]').append(incompleteLink);
           task.attachTaskEditListeners(() => {
             task.attachTaskEditFormListeners(getGroupData);
           });
-        }
+        } else if (hasPrivilege(data, task['assigned-to-id'])) {
+            let incompleteLink = task.taskCardIncompleteLink();
+            $('.task-links[data-taskId="' + task.id + '"]').append(incompleteLink);
+          }
       });
     });
   });

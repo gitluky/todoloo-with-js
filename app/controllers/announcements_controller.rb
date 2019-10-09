@@ -22,17 +22,17 @@ class AnnouncementsController < ApplicationController
   end
 
   def edit
-
+    render partial: 'announcement_form', locals: { group: @group, announcement: @announcement }
   end
 
   def update
     @announcement.update(announcement_params)
-    redirect_to group_path(@group)
+    render json: @announcement
   end
 
   def destroy
     @announcement.destroy
-    redirect_to group_path(@group)
+    render json: @announcement
   end
 
   private
@@ -51,7 +51,7 @@ class AnnouncementsController < ApplicationController
 
   def check_edit_privileges
     @group = @announcement.group
-    if !current_user.is_admin?(@group) && current_user != @announcement.created_by
+    if !current_user.is_admin?(@group) && current_user != @announcement.user_id
       redirect_to group_path(@group)
     end
   end
